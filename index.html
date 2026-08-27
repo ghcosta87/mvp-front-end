@@ -6,8 +6,10 @@
     <title>Captura de Preços - MVP</title>
     <style>
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; }
-        video, canvas { width: 100%; max-width: 400px; border-radius: 8px; background: #000; }
+        video, canvas { width: 100%; max-width: 400px; border-radius: 8px; background: #000; display: none; }
+        .botoes { display: flex; gap: 10px; }
         button { padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background: #007bff; color: white; }
+        button.btn-danger { background: #dc3545; }
         #resultado { margin-top: 15px; width: 100%; max-width: 400px; background: #f4f4f4; padding: 10px; border-radius: 6px; }
     </style>
 </head>
@@ -15,12 +17,17 @@
 
     <h2>Capturar Cupom / Etiqueta</h2>
 
-    <!-- Preview da Câmera -->
+    <!-- Preview da Câmera (começa oculta) -->
     <video id="video" autoplay playsinline></video>
-    <button id="btnCapturar">Tirar Foto e Processar</button>
+
+    <!-- Botões lado a lado -->
+    <div class="botoes">
+        <button id="btnToggleCamera">📷 Ligar Câmera</button>
+        <button id="btnCapturar">Tirar Foto e Processar</button>
+    </div>
 
     <!-- Canvas Oculto para conversão em imagem -->
-    <canvas id="canvas" style="display:none;"></canvas>
+    <canvas id="canvas"></canvas>
 
     <div id="resultado">Aguardando foto...</div>
 
@@ -28,21 +35,56 @@
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const btnCapturar = document.getElementById('btnCapturar');
+        const btnToggleCamera = document.getElementById('btnToggleCamera');
         const resultadoDiv = document.getElementById('resultado');
 
-        // 1. Solicita permissão para acessar a câmera traseira do celular (ou webcam)
-        navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: { exact: "environment" } } // Para usar a câmera traseira do celular. Se falhar, use fallback:
-        }).catch(() => {
-            return navigator.mediaDevices.getUserMedia({ video: true });
-        }).then(stream => {
-            video.srcObject = stream;
-        }).catch(err => {
-            resultadoDiv.innerText = "Erro ao acessar a câmera: " + err;
-        });
+        let cameraStream = null;
+
+        // 1. Função para ligar e desligar a câmera
+        async function alternarCamera() {
+            // Se a câmera já estiver LIGADA, nós desligamos
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+                video.srcObject = null;
+                video.style.display = 'none'; // Esconde o quadro de vídeo
+                
+                btnToggleCamera.innerText = '📷 Ligar Câmera';
+                btnToggleCamera.classList.remove('btn-danger');
+            } 
+            // Se estiver DESLIGADA, nós ligamos
+            else {
+                try {
+                    // Tenta acessar a câmera traseira do celular
+                    cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: { exact: "environment" } } 
+                    }).catch(() => {
+                        // Fallback: se falhar, tenta qualquer câmera disponível (webcam/frontal)
+                        return navigator.mediaDevices.getUserMedia({ video: true });
+                    });
+
+                    video.srcObject = cameraStream;
+                    video.style.display = 'block'; // Mostra o quadro de vídeo
+                    
+                    btnToggleCamera.innerText = '🛑 Desligar Câmera';
+                    btnToggleCamera.classList.add('btn-danger');
+                } catch (err) {
+                    resultadoDiv.innerText = "Erro ao acessar a câmera: " + err;
+                }
+            }
+        }
+
+        // Associa a função ao evento de clique do botão Ligar/Desligar
+        btnToggleCamera.addEventListener('click', alternarCamera);
 
         // 2. Captura o frame e envia via POST ao Flask
         btnCapturar.addEventListener('click', () => {
+            // Valida se a câmera está ligada antes de tentar fotografar
+            if (!cameraStream) {
+                alert("Por favor, ligue a câmera antes de tirar a foto!");
+                return;
+            }
+
             resultadoDiv.innerText = "Processando imagem com a IA...";
 
             // Ajusta o tamanho do canvas para corresponder ao vídeo
