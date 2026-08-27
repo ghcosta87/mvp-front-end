@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Preços - MVP</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; }
+        video, canvas { width: 100%; max-width: 400px; border-radius: 8px; background: #000; }
+        button { padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background: #007bff; color: white; }
+        #resultado { margin-top: 15px; width: 100%; max-width: 400px; background: #f4f4f4; padding: 10px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+    <h2>Capturar Cupom / Etiqueta</h2>
+
+    <!-- Preview da Câmera -->
+    <video id="video" autoplay playsinline></video>
+    <button id="btnCapturar">Tirar Foto e Processar</button>
+
+    <!-- Canvas Oculto para conversão em imagem -->
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <div id="resultado">Aguardando foto...</div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const btnCapturar = document.getElementById('btnCapturar');
+        const resultadoDiv = document.getElementById('resultado');
+
+        // 1. Solicita permissão para acessar a câmera traseira do celular (ou webcam)
+        navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: { exact: "environment" } } // Para usar a câmera traseira do celular. Se falhar, use fallback:
+        }).catch(() => {
+            return navigator.mediaDevices.getUserMedia({ video: true });
+        }).then(stream => {
+            video.srcObject = stream;
+        }).catch(err => {
+            resultadoDiv.innerText = "Erro ao acessar a câmera: " + err;
+        });
+
+        // 2. Captura o frame e envia via POST ao Flask
+        btnCapturar.addEventListener('click', () => {
+            resultadoDiv.innerText = "Processando imagem com a IA...";
+
+            // Ajusta o tamanho do canvas para corresponder ao vídeo
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Desenha a foto atual do vídeo no canvas
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Converte o canvas para Blob (Formato JPEG)
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('imagem', blob, 'captura.jpg');
+
+                // Envia para o Flask
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    resultadoDiv.innerHTML = "<strong>Resultado:</strong><pre>" + JSON.stringify(data, null, 2) + "</pre>";
+                })
+                .catch(err => {
+                    resultadoDiv.innerText = "Erro ao processar: " + err;
+                });
+            }, 'image/jpeg', 0.85);
+        });
+    </script>
+</body>
+</html>
