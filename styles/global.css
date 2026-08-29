@@ -1,0 +1,77 @@
+/* ==========================================
+   VARIÁVEIS DE TEMA (Obrigatório para o Modal)
+=========================================== */
+:root {
+    --bg-card: #ffffff;
+    --text-main: #333333;
+    --border-color: #dee2e6;
+    --btn-primary: #3b71ca;
+}
+
+[data-theme="escuro"] {
+    --bg-card: #212529;
+    --text-main: #f8f9fa;
+    --border-color: #373b3e;
+    --btn-primary: #54b4d3;
+}
+
+[data-theme="tech"] {
+    --bg-card: #12121f;
+    --text-main: #00ffcc;
+    --border-color: #1f1f38;
+    --btn-primary: #00ffcc;
+}
+
+/* A Cortina que cobre a tela toda */
+#tela-loading {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: var(--cor-fundo, #f4f6f9); /* Cor de fundo do site */
+    display: flex;
+    justify-content: center; align-items: center;
+    z-index: 9999; /* Fica acima de qualquer outro elemento */
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+/* Classe que o JavaScript vai usar para ligar/desligar a cortina */
+.loading-ativo {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* O círculo giratório (Spinner puro em CSS) */
+.spinner {
+    width: 50px; height: 50px;
+    border: 5px solid #ccc;
+    border-top-color: #0d6efd; /* Azul do Bootstrap */
+    border-radius: 50%;
+    animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+/* Garante fundo sólido e opaco no conteúdo do modal */
+.modal-content {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    opacity: 1 !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Força os itens da lista de histórico dentro do modal a acompanharem o tema */
+.modal-content .list-group-item {
+    background-color: transparent !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Garante o fundo escuro de trás (backdrop) */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    opacity: 1 !important;
+}

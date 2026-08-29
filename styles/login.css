@@ -14,23 +14,23 @@ height: 100%;
 }
 }
 /* Animação de SAÍDA (A tela vai para a esquerda e some) */
-.animacao-sair-esquerda {
-    animation: deslizarParaEsquerda 0.5s forwards ease-in-out;
+.animacao-entrar-esquerda {
+    animation: deslizarDaEsquerda 0.4s forwards ease-in-out;
 }
 
-@keyframes deslizarParaEsquerda {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(-100%); opacity: 0; }
+@keyframes deslizarDaEsquerda {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0%); opacity: 1; }
 }
 
 /* Animação de ENTRADA (A tela vem da direita e aparece) */
-.animacao-entrar-direita {
-    animation: deslizarDaDireita 0.5s forwards ease-in-out;
+.animacao-sair-esquerda {
+    animation: deslizarParaEsquerda 0.4s forwards ease-in-out;
 }
 
-@keyframes deslizarDaDireita {
-    from { transform: translateX(100vw); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+@keyframes deslizarParaEsquerda {
+    from { transform: translateX(0%); opacity: 1; }
+    to { transform: translateX(-100%); opacity: 0; }
 }
 
 /* Opcional: Para evitar barra de rolagem horizontal durante a animação */

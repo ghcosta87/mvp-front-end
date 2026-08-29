@@ -1,0 +1,48 @@
+/* 1. Cria a classe que será aplicada no corpo da página */
+.animacao-entrar-direita {
+    /* Executa a animação por meio segundo (0.5s) */
+    animation: deslizarDaDireita 0.4s forwards ease-out;
+}
+
+/* 2. Define o movimento (Nasce fora da tela na direita e para no centro) */
+@keyframes deslizarDaDireita {
+    from { 
+        transform: translateX(100vw); /* Começa 100% fora da tela à direita */
+        opacity: 0; /* Começa invisível */
+    }
+    to { 
+        transform: translateX(0); /* Para na posição original */
+        opacity: 1; /* Fica 100% visível */
+    }
+}
+
+/* 1. Cria a classe que será aplicada no corpo da página */
+.animacao-sair-direita {
+    /* Executa a animação por meio segundo (0.5s) */
+    animation: deslizarParaDireita 0.4s forwards ease-out;
+}
+
+/* 2. Define o movimento (Nasce fora da tela na direita e para no centro) */
+@keyframes deslizarParaDireita {
+    from { 
+        transform: translateX(0); /* Começa 100% fora da tela à direita */
+        opacity: 0; /* Começa invisível */
+    }
+    to { 
+        transform: translateX(100vw); /* Para na posição original */
+        opacity: 1; /* Fica 100% visível */
+    }
+}
+
+
+/* 3. Trava a rolagem horizontal para a tela não criar uma barra feia embaixo durante o movimento */
+body {
+    overflow-x: hidden; 
+}
+
+/* Diz para a tag <pre> que está dentro da div de resultado quebrar a linha */
+#resultado pre {
+    white-space: pre-wrap;       /* Quebra a linha quando chega no limite, mas mantém os recuos do JSON */
+    word-wrap: break-word;       /* Força a quebra no meio de uma palavra gigante, se necessário */
+    overflow-wrap: break-word;   /* Padrão moderno de quebra de palavras */
+}
