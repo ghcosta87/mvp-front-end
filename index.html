@@ -37,6 +37,9 @@
                         </div>
 
                         <button type="submit" id="btn-login" class="btn btn-primary btn-lg w-100">Entrar</button>
+                        <!-- Botão para alternar para a tela de cadastro -->
+                        <button type="button" id="btn-ir-cadastro" class="btn btn-link btn-sm text-decoration-none">Não
+                            tem uma conta? Cadastre-se</button>
                     </form>
                 </div>
             </div>
@@ -88,13 +91,24 @@
                 <h5 class="mb-3 text-center fw-bold">Produtos Capturados</h5>
 
                 <!-- 🔍 NOVO: Campo de Pesquisa -->
-                <div class="form-outline mb-3" data-mdb-input-init>
-                    <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
+                <div class="d-flex gap-2 mb-3">
+                    <div class="form-outline flex-grow-1" data-mdb-input-init>
+                        <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
+                    </div>
+                    <button id="btn-vincular" class="btn btn-warning shadow-sm">
+                        <i class="fas fa-link"></i> Vincular
+                    </button>
                 </div>
 
                 <ul class="list-group list-group-flush" id="lista-produtos">
                     <!-- Os itens virão do Javascript -->
                 </ul>
+                <!-- <div class="form-outline mb-3" data-mdb-input-init>
+                    <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
+                </div>
+
+                <ul class="list-group list-group-flush" id="lista-produtos">
+                </ul> -->
             </div>
         </div>
     </section>
@@ -130,6 +144,62 @@
         </div>
     </div>
 
+    <!-- ==========================================
+    NOVO: TELA 3: CADASTRO DE USUÁRIO (Invisível por padrão)
+=========================================== -->
+    <section id="tela-cadastro" class="vh-100 d-flex justify-content-center align-items-center d-none">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card p-4 shadow-sm">
+                        <h2 class="mb-4 fw-bold text-center text-primary">Criar Nova Conta</h2>
+
+                        <form id="form-cadastro">
+                            <div class="form-floating mb-3">
+                                <input type="text" id="cad-nome" class="form-control" placeholder="Nome Completo"
+                                    required />
+                                <label for="cad-nome">Nome Completo</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="text" id="cad-cpf" class="form-control" placeholder="CPF" required />
+                                <label for="cad-cpf">CPF (123.456.789-00)</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="email" id="cad-email" class="form-control" placeholder="E-mail" required />
+                                <label for="cad-email">E-mail</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="date" id="cad-nascimento" class="form-control" placeholder="Nascimento" />
+                                <label for="cad-nascimento">Data de Nascimento</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="tel" id="cad-telefone" class="form-control" placeholder="Telefone" />
+                                <label for="cad-telefone">Telefone (Somente números)</label>
+                            </div>
+
+                            <div class="form-floating mb-4">
+                                <input type="password" id="cad-senha" class="form-control" placeholder="Senha"
+                                    required />
+                                <label for="cad-senha">Senha</label>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="button" id="btn-voltar-login"
+                                    class="btn btn-secondary w-50">Voltar</button>
+                                <button type="submit" id="btn-cadastrar-acao"
+                                    class="btn btn-success w-50">Cadastrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 1º: MDBootstrap (Sempre primeiro, pois os seus scripts podem precisar dele) -->
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
@@ -144,6 +214,7 @@
     <script src="js/autenticacao.js"></script>
     <script src="js/camera.js"></script>
     <script src="js/produtos.js"></script>
+    <script src="js/cadastro.js"></script>
 </body>
 
 </html>

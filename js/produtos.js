@@ -110,6 +110,85 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+
+// Função centralizada para desenhar os produtos
+function renderizarLista(produtos) {
+    const listaHTML = document.getElementById('lista-produtos');
+    if (!listaHTML) return;
+
+    listaHTML.innerHTML = ''; 
+
+    if (produtos.length === 0) {
+        listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`;
+        return;
+    }
+
+    produtos.forEach(produto => {
+        // NOVO: Adicionado input checkbox e o event.stopPropagation() para não abrir o modal ao marcar a caixa
+        listaHTML.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 border-bottom">
+                
+                <div class="d-flex align-items-center gap-3">
+                    <input class="form-check-input produto-cb fs-5" type="checkbox" value="${produto.nome}" onclick="event.stopPropagation()">
+                    
+                    <div class="d-flex flex-column" onclick="abrirHistorico('${produto.nome}')" style="cursor: pointer;">
+                        <span class="fw-bold">${produto.nome}</span>
+                        <small style="color: var(--text-muted);">Clique para histórico</small> 
+                    </div>
+                </div>
+
+                <span class="text-price fw-bold fs-5">$ ${produto.preco.toFixed(2).replace('.', ',')}</span>
+            </li>
+        `;
+    });
+}
+
+// 🔗 NOVA LÓGICA: Ouvinte do botão de vincular
+document.addEventListener("DOMContentLoaded", () => {
+    const btnVincular = document.getElementById("btn-vincular");
+    
+    if (btnVincular) {
+        btnVincular.addEventListener("click", async () => {
+            // Busca todos os checkboxes que estão marcados
+            const marcados = document.querySelectorAll('.produto-cb:checked');
+            
+            // Extrai apenas o valor (nome do produto) de cada checkbox marcado
+            const nomesSelecionados = Array.from(marcados).map(cb => cb.value);
+
+            if (nomesSelecionados.length < 2) {
+                alert("Selecione pelo menos 2 produtos para criar um vínculo.");
+                return;
+            }
+
+            try {
+                // Envia a lista de nomes para o Back-end
+                const resposta = await fetch("http://127.0.0.1:5000/produtos/vincular", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nomes: nomesSelecionados })
+                });
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao vincular produtos no servidor.");
+                }
+
+                alert("Produtos vinculados com sucesso!");
+                
+                // Desmarca as caixinhas após o sucesso
+                marcados.forEach(cb => cb.checked = false);
+                
+                // Opcional: Recarrega a lista para atualizar dados
+                carregarProdutos();
+
+            } catch (erro) {
+                console.error("Erro ao vincular:", erro);
+                alert(erro.message);
+            }
+        });
+    }
+});
+
 // // ARQUIVO: produtos.js
 
 // // Função para buscar produtos no Back-end e desenhar no Front-end
