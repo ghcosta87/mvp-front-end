@@ -60,11 +60,91 @@
                     onclick="document.body.setAttribute('data-theme', 'escuro')">🌙 Escuro</button>
                 <button class="btn btn-sm btn-outline-secondary"
                     onclick="document.body.setAttribute('data-theme', 'tech')">🔮 Tech</button>
-                <button id="btn-sair" class="btn btn-sm btn-danger ms-3">Sair</button>
+                <!-- <button id="btn-sair" class="btn btn-sm btn-danger ms-3">Sair</button> -->
+                <!-- Cabeçalho / Botões do Topo -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Outros botões existentes... -->
+                    <button id="btn-sair" class="btn btn-danger">Sair</button>
+                    <button id="btn-encerrar-conta" class="btn btn-outline-danger">Encerrar Conta</button>
+                </div>
+
+                <!-- Modal de Confirmação para Encerrar Conta -->
+                <div class="modal fade" id="modalEncerrarConta" tabindex="-1" aria-labelledby="modalEncerrarContaLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title text-danger" id="modalEncerrarContaLabel">Encerrar Conta</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="text-muted">Tem certeza de que deseja encerrar sua conta? Esta ação é
+                                    irreversível e apagará todos os seus dados.</p>
+                                <div class="form-outline mb-3">
+                                    <input type="password" id="senha-confirmacao" class="form-control" />
+                                    <label class="form-label" for="senha-confirmacao">Digite sua senha para
+                                        confirmar</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Não</button>
+                                <button type="button" id="btn-confirmar-encerramento" class="btn btn-danger">Sim,
+                                    Encerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Câmera e Botões -->
-            <div class="d-flex flex-column align-items-center mb-4">
+            <!-- Container Centralizado com largura total (w-100) -->
+            <div class="d-flex flex-column align-items-center justify-content-center w-100 my-4">
+                <div class="d-flex align-items-center justify-content-center gap-3">
+                    <!-- Botão Abrir Câmera -->
+                    <button type="button" id="btn-abrir-camera" class="btn btn-primary px-4 shadow-sm">
+                        <i class="fas fa-camera me-2"></i> Abrir Câmera
+                    </button>
+
+                    <!-- Input de Arquivo Estilizado como Botão -->
+                    <label for="input-comprovante" class="btn btn-outline-primary px-4 mb-0 shadow-sm"
+                        style="cursor: pointer;">
+                        <i class="fas fa-upload me-2"></i> Anexar Arquivo
+                    </label>
+                    <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
+                </div>
+
+                <!-- Texto do arquivo selecionado -->
+                <small id="nome-arquivo" class="text-muted mt-2">Nenhum arquivo selecionado</small>
+
+                <div id="resultado" class="resultado-box w-100 text-center p-3 rounded shadow-sm"
+                    style="max-width: 400px; border: 1px solid;">
+                    Pronto para escanear produto.
+                </div>
+            </div>
+
+            <!-- Modal da Câmera -->
+            <div class="modal fade" id="modalCamera" tabindex="-1" aria-labelledby="modalCameraLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title" id="modalCameraLabel">Capturar Comprovante</h5>
+                            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center p-0">
+                            <video id="video-camera" autoplay playsinline class="w-100 rounded"></video>
+                            <canvas id="canvas-camera" class="d-none"></canvas>
+                        </div>
+                        <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-4">
+                            <button type="button" id="btn-voltar-camera" class="btn btn-secondary px-4"
+                                data-mdb-dismiss="modal">Voltar</button>
+                            <button type="button" id="btn-capturar-foto" class="btn btn-success px-4">Capturar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="d-flex flex-column align-items-center mb-4">
                 <div class="camera-box shadow-sm mb-3">
                     <video id="video" autoplay muted playsinline style="display:none;"></video>
                     <canvas id="canvas" style="display:none;"></canvas>
@@ -76,40 +156,36 @@
                 <div class="d-flex gap-2 mb-3">
                     <button id="btnToggleCamera" class="btn btn-primary">Ligar Câmera</button>
                     <button id="btnCapturar" class="btn btn-success"><i class="fas fa-camera"></i> Capturar</button>
-                </div>
+                </div> -->
 
-                <div id="resultado" class="resultado-box w-100 text-center p-3 rounded shadow-sm"
-                    style="max-width: 400px; border: 1px solid;">
-                    Pronto para escanear produto.
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Lista de Produtos -->
+        <div class="mx-auto" style="max-width: 500px;">
+            <h5 class="mb-3 text-center fw-bold">Produtos Capturados</h5>
+
+            <!-- 🔍 NOVO: Campo de Pesquisa -->
+            <div class="d-flex gap-2 mb-3">
+                <div class="form-outline flex-grow-1" data-mdb-input-init>
+                    <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
                 </div>
+                <button id="btn-vincular" class="btn btn-warning shadow-sm">
+                    <i class="fas fa-link"></i> Vincular
+                </button>
             </div>
 
-            <hr class="my-4">
-
-            <!-- Lista de Produtos -->
-            <div class="mx-auto" style="max-width: 500px;">
-                <h5 class="mb-3 text-center fw-bold">Produtos Capturados</h5>
-
-                <!-- 🔍 NOVO: Campo de Pesquisa -->
-                <div class="d-flex gap-2 mb-3">
-                    <div class="form-outline flex-grow-1" data-mdb-input-init>
-                        <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
-                    </div>
-                    <button id="btn-vincular" class="btn btn-warning shadow-sm">
-                        <i class="fas fa-link"></i> Vincular
-                    </button>
-                </div>
-
-                <ul class="list-group list-group-flush" id="lista-produtos">
-                    <!-- Os itens virão do Javascript -->
-                </ul>
-                <!-- <div class="form-outline mb-3" data-mdb-input-init>
+            <ul class="list-group list-group-flush" id="lista-produtos">
+                <!-- Os itens virão do Javascript -->
+            </ul>
+            <!-- <div class="form-outline mb-3" data-mdb-input-init>
                     <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
                 </div>
 
                 <ul class="list-group list-group-flush" id="lista-produtos">
                 </ul> -->
-            </div>
+        </div>
         </div>
     </section>
 
