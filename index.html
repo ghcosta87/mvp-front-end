@@ -16,6 +16,38 @@
 </head>
 
 <body>
+    <!-- ================= 1. MENU LATERAL (OFFCANVAS) ================= -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" style="width: 25%;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold">Menu</h5>
+            <button type="button" class="btn-close" data-mdb-dismiss="offcanvas" aria-label="Fechar"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
+            <!-- Parte Superior: Temas -->
+            <div class="d-flex flex-column gap-2">
+                <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
+                    <i class="fas fa-sun me-2"></i> Claro
+                </button>
+                <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
+                    <i class="fas fa-moon me-2"></i> Escuro
+                </button>
+                <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
+                    <i class="fas fa-microchip me-2"></i> Tech
+                </button>
+            </div>
+
+            <!-- Parte Inferior: Gerenciamento de Conta -->
+            <div class="d-flex flex-column gap-2 mt-auto">
+                <button id="btn-encerrar-conta" class="btn btn-outline-danger text-start w-100">
+                    <i class="fas fa-user-times me-2"></i> Encerrar Conta
+                </button>
+                <button id="btn-sair" class="btn btn-danger text-start w-100">
+                    <i class="fas fa-sign-out-alt me-2"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
     <!-- ==========================================
          TELA 1: LOGIN (Visível por padrão)
     =========================================== -->
@@ -46,97 +78,74 @@
         </div>
     </section>
 
+
     <!-- ==========================================
          TELA 2: PAINEL PRINCIPAL (Invisível por padrão)
     =========================================== -->
+
     <section id="tela-painel" style="display: none;">
         <div class="container py-4">
-
-            <!-- Menu de Temas -->
-            <div class="d-flex justify-content-end mb-3 gap-2">
-                <button class="btn btn-sm btn-outline-secondary"
-                    onclick="document.body.setAttribute('data-theme', '')">☀️ Claro</button>
-                <button class="btn btn-sm btn-outline-secondary"
-                    onclick="document.body.setAttribute('data-theme', 'escuro')">🌙 Escuro</button>
-                <button class="btn btn-sm btn-outline-secondary"
-                    onclick="document.body.setAttribute('data-theme', 'tech')">🔮 Tech</button>
-                <!-- <button id="btn-sair" class="btn btn-sm btn-danger ms-3">Sair</button> -->
-                <!-- Cabeçalho / Botões do Topo -->
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Outros botões existentes... -->
-                    <button id="btn-sair" class="btn btn-danger">Sair</button>
-                    <button id="btn-encerrar-conta" class="btn btn-outline-danger">Encerrar Conta</button>
-                </div>
-
-                <!-- Modal de Confirmação para Encerrar Conta -->
-                <div class="modal fade" id="modalEncerrarConta" tabindex="-1" aria-labelledby="modalEncerrarContaLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header border-0">
-                                <h5 class="modal-title text-danger" id="modalEncerrarContaLabel">Encerrar Conta</h5>
-                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="text-muted">Tem certeza de que deseja encerrar sua conta? Esta ação é
-                                    irreversível e apagará todos os seus dados.</p>
-                                <div class="form-outline mb-3">
-                                    <input type="password" id="senha-confirmacao" class="form-control" />
-                                    <label class="form-label" for="senha-confirmacao">Digite sua senha para
-                                        confirmar</label>
-                                </div>
-                            </div>
-                            <div class="modal-footer border-0">
-                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Não</button>
-                                <button type="button" id="btn-confirmar-encerramento" class="btn btn-danger">Sim,
-                                    Encerrar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Container Centralizado com largura total (w-100) -->
-            <div class="d-flex flex-column align-items-center justify-content-center w-100 my-4">
-                <div class="d-flex align-items-center justify-content-center gap-3">
-                    <!-- Botão Abrir Câmera -->
-                    <button type="button" id="btn-abrir-camera" class="btn btn-primary px-4 shadow-sm">
-                        <i class="fas fa-camera me-2"></i> Abrir Câmera
+            <!-- ================= 2. BARRA SUPERIOR (PRIMEIRA LINHA) ================= -->
+            <div class="container-fluid px-0 mb-4 mt-3">
+                <div class="d-flex align-items-center gap-2 w-100">
+                    <!-- Botão Abrir Menu Lateral -->
+                    <!-- <button id="btn-menu" class="btn btn-secondary px-3 shadow-sm" type="button"
+                        data-mdb-toggle="offcanvas" data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu"
+                        title="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button> -->
+                    <!-- Botão Abrir Menu Lateral (Sem atributos data-mdb) -->
+                    <button id="btn-menu" class="btn btn-secondary px-3 shadow-sm" type="button" title="Menu">
+                        <i class="fas fa-bars"></i>
                     </button>
 
-                    <!-- Input de Arquivo Estilizado como Botão -->
-                    <label for="input-comprovante" class="btn btn-outline-primary px-4 mb-0 shadow-sm"
-                        style="cursor: pointer;">
-                        <i class="fas fa-upload me-2"></i> Anexar Arquivo
+                    <!-- Campo de Busca -->
+                    <div class="form-outline flex-grow-1 mb-0" data-mdb-input-init>
+                        <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
+                    </div>
+
+                    <!-- Botão Vincular -->
+                    <button id="btn-vincular" class="btn btn-warning text-white shadow-sm px-3 text-nowrap">
+                        <i class="fas fa-link me-1"></i> Vincular
+                    </button>
+
+                    <!-- Ícone: Abrir Câmera -->
+                    <button type="button" id="btn-abrir-camera" class="btn btn-primary px-3 shadow-sm"
+                        title="Abrir Câmera">
+                        <i class="fas fa-camera"></i>
+                    </button>
+
+                    <!-- Ícone: Anexar Arquivo -->
+                    <label for="input-comprovante"
+                        class="btn btn-outline-primary mb-0 px-3 shadow-sm d-flex align-items-center justify-content-center"
+                        style="cursor: pointer; height: 38px;" title="Anexar Arquivo">
+                        <i class="fas fa-upload"></i>
                     </label>
                     <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
                 </div>
-
-                <!-- Texto do arquivo selecionado -->
-                <small id="nome-arquivo" class="text-muted mt-2">Nenhum arquivo selecionado</small>
-
-                <div id="resultado" class="resultado-box w-100 text-center p-3 rounded shadow-sm"
-                    style="max-width: 400px; border: 1px solid;">
-                    Pronto para escanear produto.
-                </div>
             </div>
 
-            <!-- Modal da Câmera -->
+            <!-- ================= 3. MODAL DA CÂMERA (COM O RESULTADO DENTRO) ================= -->
             <div class="modal fade" id="modalCamera" tabindex="-1" aria-labelledby="modalCameraLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content bg-dark text-white">
-                        <div class="modal-header border-0">
-                            <h5 class="modal-title" id="modalCameraLabel">Capturar Comprovante</h5>
-                            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pb-0">
+                            <h5 class="modal-title fw-bold" id="modalCameraLabel">Escanear Produto</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-center p-0">
-                            <video id="video-camera" autoplay playsinline class="w-100 rounded"></video>
+                        <div class="modal-body text-center p-3">
+                            <video id="video-camera" autoplay playsinline class="w-100 rounded mb-2 shadow-sm"
+                                style="max-height: 300px; object-fit: cover;"></video>
                             <canvas id="canvas-camera" class="d-none"></canvas>
+
+                            <!-- O DIV DE RESULTADO AGORA FICA AQUI DENTRO -->
+                            <div id="resultado" class="text-muted small mt-2 fw-semibold">
+                                Pronto para escanear produto.
+                            </div>
                         </div>
-                        <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-4">
+                        <div class="modal-footer border-0 d-flex justify-content-center gap-2 pt-0 pb-3">
                             <button type="button" id="btn-voltar-camera" class="btn btn-secondary px-4"
                                 data-mdb-dismiss="modal">Voltar</button>
                             <button type="button" id="btn-capturar-foto" class="btn btn-success px-4">Capturar</button>
@@ -144,19 +153,35 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="d-flex flex-column align-items-center mb-4">
-                <div class="camera-box shadow-sm mb-3">
-                    <video id="video" autoplay muted playsinline style="display:none;"></video>
-                    <canvas id="canvas" style="display:none;"></canvas>
-                    <div id="camera-placeholder" class="d-flex justify-content-center align-items-center h-100">
-                        <span style="color: white;">Câmera Desligada</span>
+
+            <!-- Modal de Confirmação para Encerrar Conta -->
+            <div class="modal fade" id="modalEncerrarConta" tabindex="-1" aria-labelledby="modalEncerrarContaLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title text-danger" id="modalEncerrarContaLabel">Encerrar Conta</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-muted">Tem certeza de que deseja encerrar sua conta? Esta ação é
+                                irreversível e apagará todos os seus dados.</p>
+                            <div class="form-outline mb-3">
+                                <input type="password" id="senha-confirmacao" class="form-control" />
+                                <label class="form-label" for="senha-confirmacao">Digite sua senha para
+                                    confirmar</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Não</button>
+                            <button type="button" id="btn-confirmar-encerramento" class="btn btn-danger">Sim,
+                                Encerrar</button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="d-flex gap-2 mb-3">
-                    <button id="btnToggleCamera" class="btn btn-primary">Ligar Câmera</button>
-                    <button id="btnCapturar" class="btn btn-success"><i class="fas fa-camera"></i> Capturar</button>
-                </div> -->
+            </div>
+        </div>
 
         </div>
 
@@ -165,16 +190,6 @@
         <!-- Lista de Produtos -->
         <div class="mx-auto" style="max-width: 500px;">
             <h5 class="mb-3 text-center fw-bold">Produtos Capturados</h5>
-
-            <!-- 🔍 NOVO: Campo de Pesquisa -->
-            <div class="d-flex gap-2 mb-3">
-                <div class="form-outline flex-grow-1" data-mdb-input-init>
-                    <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
-                </div>
-                <button id="btn-vincular" class="btn btn-warning shadow-sm">
-                    <i class="fas fa-link"></i> Vincular
-                </button>
-            </div>
 
             <ul class="list-group list-group-flush" id="lista-produtos">
                 <!-- Os itens virão do Javascript -->

@@ -1,37 +1,70 @@
-// ARQUIVO: app.js
+// ########################################
+// # ELEMENTOS DO HTML
+// ########################################
+// const botaoMenu = document.getElementByZId("btn-menu");
+// const menuLateral = document.getElementById("sidebarMenu");
+// if (botaoMenu)
+//     botaoMenu.addEventListener("click", () => {
 
-// 1. A MÁQUINA DE ESTADO DA SPA (Função que troca as telas)
-// function navegarPara(tela) {
-//     const telaLogin = document.getElementById("tela-login");
-//     const telaPainel = document.getElementById("tela-painel");
+//         console.log("botão menu clicado!")
+//         menuLateral.classList.remove("d-none");
+//         menuLateral.style.display = "flex"
+//     });
 
-//     if (tela === "painel") {
-//         // Usa a classe d-none do Bootstrap para forçar o sumiço do Login
-//         telaLogin.classList.add("d-none"); 
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Mapeia os botões do HTML
+    const btnClaro = document.getElementById("btn-tema-claro");
+    const btnEscuro = document.getElementById("btn-tema-escuro");
+    const btnTech = document.getElementById("btn-tema-tech");
+    const sidebarEl = document.getElementById("sidebarMenu");
 
-//         // Revela o Painel
-//         telaPainel.style.display = "block"; 
-//     } else if (tela === "login") {
-//         // Tira o d-none para o Login voltar a aparecer
-//         telaLogin.classList.remove("d-none"); 
+    // 2. Função central para aplicar o tema e fechar o menu
+    function aplicarTema(tema) {
+        // Aplica o atributo que o CSS reconhece (ex: data-theme="tech")
+        if (tema === "claro") {
+            document.body.removeAttribute("data-theme"); // O claro é o padrão sem atributo
+        } else {
+            document.body.setAttribute("data-theme", tema);
+        }
+        
+        // Salva a escolha para não perder ao atualizar a página
+        localStorage.setItem("tema_escolhido", tema);
 
-//         // Esconde o Painel
-//         telaPainel.style.display = "none";
-//     }
-// }
+        // Fecha o menu lateral suavemente após a escolha
+        if (sidebarEl) {
+            const menuLateral = mdb.Offcanvas.getInstance(sidebarEl);
+            if (menuLateral) menuLateral.hide();
+        }
+    }
 
+    // 3. Adiciona os ouvintes de clique nos botões
+    if (btnClaro) btnClaro.addEventListener("click", () => aplicarTema("claro"));
+    if (btnEscuro) btnEscuro.addEventListener("click", () => aplicarTema("escuro"));
+    if (btnTech) btnTech.addEventListener("click", () => aplicarTema("tech"));
 
+    // 4. Carrega o tema salvo automaticamente ao abrir a página
+    const temaSalvo = localStorage.getItem("tema_escolhido");
+    if (temaSalvo) {
+        aplicarTema(temaSalvo);
+    }
+});
 
-// // 2. AUTO-LOGIN (Verifica se já existe um usuário salvo ao abrir a página)
-// // Se houver, pula direto para o painel!
-// window.addEventListener("DOMContentLoaded", () => {
-//     const usuarioLogado = localStorage.getItem("usuario_logado");
-//     if (usuarioLogado) {
-//         navegarPara("painel");
-//     } else {
-//         navegarPara("login");
-//     }
-// });
+document.addEventListener("DOMContentLoaded", () => {
+    const btnMenu = document.getElementById("btn-menu");
+    const sidebarEl = document.getElementById("sidebarMenu");
+
+    if (btnMenu && sidebarEl) {
+        btnMenu.addEventListener("click", () => {
+            console.log("Abrindo menu lateral...");
+            
+            // Procura se o MDB já conhece esse menu, se não, cria a instância na hora
+            const menuLateral = mdb.Offcanvas.getInstance(sidebarEl) || new mdb.Offcanvas(sidebarEl);
+            
+            // Comando oficial para deslizar o menu
+            menuLateral.show(); 
+        });
+    }
+});
 
 // Função global para alternar entre as telas da SPA
 function navegarPara(tela) {
@@ -53,7 +86,7 @@ function navegarPara(tela) {
             telaCadastro.classList.add("d-none"); // Garante que o cadastro esteja escondido
             break;
         case "cadastro":
-             telaCadastro.classList.remove("d-none"); 
+            telaCadastro.classList.remove("d-none");
             telaCadastro.style.display = "flex";
             break;
     }
@@ -66,30 +99,30 @@ function navegarPara(tela) {
     //     } else if (tela === "cadastro") {
     //         if (telaCadastro) telaCadastro.style.display = "flex"; // Usa flex para centralizar
     //     }
+}
+
+// Ouvintes globais para os botões de transição
+document.addEventListener("DOMContentLoaded", () => {
+    const btnIrCadastro = document.getElementById("btn-ir-cadastro");
+    const btnVoltarLogin = document.getElementById("btn-voltar-login");
+
+    if (btnIrCadastro) {
+        btnIrCadastro.addEventListener("click", () => navegarPara("cadastro"));
     }
 
-    // Ouvintes globais para os botões de transição
-    document.addEventListener("DOMContentLoaded", () => {
-        const btnIrCadastro = document.getElementById("btn-ir-cadastro");
-        const btnVoltarLogin = document.getElementById("btn-voltar-login");
+    if (btnVoltarLogin) {
+        btnVoltarLogin.addEventListener("click", () => navegarPara("login"));
+    }
+});
 
-        if (btnIrCadastro) {
-            btnIrCadastro.addEventListener("click", () => navegarPara("cadastro"));
-        }
+// 3. LÓGICA DE LOGOUT (Botão Sair)
+const botaoSair = document.getElementById("btn-sair");
+if (botaoSair) {
+    botaoSair.addEventListener("click", () => {
+        // Apaga o usuário do navegador
+        localStorage.removeItem("usuario_logado");
 
-        if (btnVoltarLogin) {
-            btnVoltarLogin.addEventListener("click", () => navegarPara("login"));
-        }
+        // Volta instantaneamente para a tela inicial
+        navegarPara("login");
     });
-
-    // 3. LÓGICA DE LOGOUT (Botão Sair)
-    const botaoSair = document.getElementById("btn-sair");
-    if (botaoSair) {
-        botaoSair.addEventListener("click", () => {
-            // Apaga o usuário do navegador
-            localStorage.removeItem("usuario_logado");
-
-            // Volta instantaneamente para a tela inicial
-            navegarPara("login");
-        });
-    }
+}
