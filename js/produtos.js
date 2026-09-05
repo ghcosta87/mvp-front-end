@@ -1,43 +1,47 @@
-// ARQUIVO: produtos.js
+// ########################################
+// # VÁRIAVEIS GLOBAIS
+// ########################################
+let produtosGlobais = []
 
-// Variável global para guardar os produtos e permitir o funcionamento da busca
-let produtosGlobais = [];
+// ########################################
+// # VÁRIAVEIS GLOBAIS
+// ########################################
 
-// 1. Função principal para buscar produtos no Back-end
+// ########################################
+// # ELEMENTOS DO HTML
+// ########################################
+const listaHTML = document.getElementById('lista-produtos')
+const btnVincular = document.getElementById("btn-vincular")
+const inputBusca = document.getElementById('input-busca');
+
 async function carregarProdutos() {
-    const listaHTML = document.getElementById('lista-produtos');
-    if (!listaHTML) return;
-
-    try {
-        const resposta = await fetch("http://127.0.0.1:5000/produtos", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!resposta.ok) throw new Error("Erro ao buscar dados do servidor");
-
-        const dados = await resposta.json();
-        
-        // Salva na variável global os produtos vindos do ListagemProdutosSchema
-        produtosGlobais = dados.produtos || [];
-
-        // Chama a função centralizada para desenhar na tela
-        renderizarLista(produtosGlobais);
-
-    } catch (erro) {
-        console.error("Erro na listagem:", erro);
-        listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-danger px-0">Falha ao carregar produtos. O Flask está rodando?</li>`;
-    }
+    if (listaHTML)
+        try {
+            const resposta = await fetch(`${CONSTANTS.API_URL}/produtos`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            //precisa melhorar esse tratameto de erro
+            if (!resposta.ok) throw new Error("Erro ao buscar dados do servidor");
+            const dados = await resposta.json();
+            // Salva na variável global os produtos vindos do ListagemProdutosSchema
+            produtosGlobais = dados.produtos || []; //o q é isso?
+            // Chama a função centralizada para desenhar na tela
+            renderizarLista(produtosGlobais);
+        } catch (erro) {
+            console.error("Erro na listagem:", erro);
+            listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-danger px-0">Falha ao carregar produtos. O Flask está rodando?</li>`;
+        }
 }
 
+// o que vem primeiro? faz diferença? essa função é usada acima, não tem q ser declarada primeiro?
 // 2. Função centralizada para desenhar os produtos (evita código duplicado)
 function renderizarLista(produtos) {
-    const listaHTML = document.getElementById('lista-produtos');
     if (!listaHTML) return;
 
-    listaHTML.innerHTML = ''; 
+    listaHTML.innerHTML = '';
 
     if (produtos.length === 0) {
         listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`;
@@ -87,21 +91,14 @@ function abrirHistorico(nomeDoProduto) {
     modal.show();
 }
 
-// 4. Inicializadores e Ouvintes ao carregar a página
-document.addEventListener("DOMContentLoaded", () => {
-    // Carrega os produtos se o usuário estiver logado
-    if (localStorage.getItem("usuario_logado")) {
-        carregarProdutos();
-    }
-
-    // Configura o campo de busca em tempo real
-    const inputBusca = document.getElementById('input-busca');
+const filtrarProdutos = () => {
     if (inputBusca) {
         inputBusca.addEventListener('input', (e) => {
+            console.log('campo de busca modificado!')
             const termo = e.target.value.toLowerCase().trim();
-            
+
             // Filtra os produtos salvos na memória
-            const produtosFiltrados = produtosGlobais.filter(produto => 
+            const produtosFiltrados = produtosGlobais.filter(produto =>
                 produto.nome.toLowerCase().includes(termo)
             );
 
@@ -109,15 +106,17 @@ document.addEventListener("DOMContentLoaded", () => {
             renderizarLista(produtosFiltrados);
         });
     }
-});
+}
+
+// 4. Inicializadores e Ouvintes ao carregar a página
+
 
 
 // Função centralizada para desenhar os produtos
 function renderizarLista(produtos) {
-    const listaHTML = document.getElementById('lista-produtos');
     if (!listaHTML) return;
 
-    listaHTML.innerHTML = ''; 
+    listaHTML.innerHTML = '';
 
     if (produtos.length === 0) {
         listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`;
@@ -146,13 +145,11 @@ function renderizarLista(produtos) {
 
 // 🔗 NOVA LÓGICA: Ouvinte do botão de vincular
 document.addEventListener("DOMContentLoaded", () => {
-    const btnVincular = document.getElementById("btn-vincular");
-    
     if (btnVincular) {
         btnVincular.addEventListener("click", async () => {
             // Busca todos os checkboxes que estão marcados
             const marcados = document.querySelectorAll('.produto-cb:checked');
-            
+
             // Extrai apenas o valor (nome do produto) de cada checkbox marcado
             const nomesSelecionados = Array.from(marcados).map(cb => cb.value);
 
@@ -174,10 +171,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 alert("Produtos vinculados com sucesso!");
-                
+
                 // Desmarca as caixinhas após o sucesso
                 marcados.forEach(cb => cb.checked = false);
-                
+
                 // Opcional: Recarrega a lista para atualizar dados
                 carregarProdutos();
 
@@ -187,143 +184,33 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+})
+
+
+const telaPainel2 = document.getElementById("tela-painel");
+telaPainel2.addEventListener("click", () => {
+    console.log("evento na tela do painel 2");
+    // telaPainel.style.display = "block";
+    //o eveto precisa estar relacioado com o style display chage
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Carrega os produtos se o usuário estiver logado
+    userState = localStorage.getItem("usuario_logado")
+
+    if (localStorage.getItem("usuario_logado")) {
+        console.log("Usuário está logado...");
+        console.log(`{userState}`)
+        carregarProdutos();
+    } else {
+        console.log("Usuário não logado. Redirecionando para login...");
+        console.log(`{userState}`)
+    }
+
+    if (userState)
+        console.log("Usuário logado: " + userState)
+    else
+        console.log("Usuário não logado.")
+
+    filtrarProdutos()
 });
-
-// // ARQUIVO: produtos.js
-
-// // Função para buscar produtos no Back-end e desenhar no Front-end
-// async function carregarProdutos() {
-//     const listaHTML = document.getElementById('lista-produtos');
-//     if (!listaHTML) return;
-
-//     try {
-//         // Altere "/produtos" para o nome exato da sua rota no Flask que lista os itens
-//         // const resposta = await fetch(`${CONSTANTS.API_URL}/produtos`);
-//         const resposta = await fetch("http://127.0.0.1:5000/produtos", {
-//             method: "GET",
-//             headers: {
-//                 "Content-Type": "application/json"
-//             },
-//             // body: JSON.stringify(pacoteDados)
-//         });
-
-//         if (!resposta.ok) throw new Error("Erro ao buscar dados do servidor");
-
-//         const dados = await resposta.json();
-
-//         // Acessa a propriedade 'produtos' que definimos no ListagemProdutosSchema!
-//         const produtos = dados.produtos || [];
-
-//         // Zera a lista (remove os exemplos estáticos)
-//         listaHTML.innerHTML = '';
-
-//         // Se o banco estiver vazio
-//         if (produtos.length === 0) {
-//             listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto cadastrado ainda.</li>`;
-//             return;
-//         }
-
-//         // Desenha os produtos respeitando o nosso layout responsivo
-//         produtos.forEach(produto => {
-//             listaHTML.innerHTML += `
-//                 <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 border-bottom" 
-//                     onclick="abrirHistorico('${produto.nome}')" 
-//                     style="cursor: pointer;">
-                    
-//                     <div class="d-flex flex-column">
-//                         <span class="fw-bold">${produto.nome}</span>
-//                         <!-- Usamos uma data genérica ou você pode puxar produto.data_criacao se tiver no banco -->
-//                         <small style="color: var(--text-muted);">Clique para histórico</small> 
-//                     </div>
-//                     <span class="text-price fw-bold fs-5">$ ${produto.preco.toFixed(2).replace('.', ',')}</span>
-//                 </li>
-//             `;
-//         });
-
-//     } catch (erro) {
-//         console.error("Erro na listagem:", erro);
-//         listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-danger px-0">Falha ao carregar produtos. O Flask está rodando?</li>`;
-//     }
-// }
-
-// // ==========================================
-// // LÓGICA DO MODAL DE HISTÓRICO DE PREÇOS
-// // ==========================================
-// function abrirHistorico(nomeDoProduto) {
-//     document.getElementById('nomeProdutoModal').innerText = nomeDoProduto;
-
-//     // TODO: Aqui você futuramente faria um fetch na rota /historico/<nome> 
-//     // Por enquanto, dados fictícios de inflação para simulação:
-//     const dadosHistorico = [
-//         { data: 'Ontem', preco: '$ 15,90' },
-//         { data: 'Semana Passada', preco: '$ 14,50' },
-//         { data: 'Mês Passado', preco: '$ 12,00' }
-//     ];
-
-//     const listaHTML = document.getElementById('listaHistorico');
-//     listaHTML.innerHTML = '';
-
-//     dadosHistorico.forEach(item => {
-//         listaHTML.innerHTML += `
-//             <li class="list-group-item d-flex justify-content-between bg-transparent px-0 border-bottom">
-//                 <span style="color: var(--text-muted);">${item.data}</span>
-//                 <span class="fw-bold">${item.preco}</span>
-//             </li>
-//         `;
-//     });
-
-//     const modal = new mdb.Modal(document.getElementById('modalHistorico'));
-//     modal.show();
-// }
-
-// // Manda carregar a lista assim que o usuário acessa o Painel
-// document.addEventListener("DOMContentLoaded", () => {
-//     // Só carrega se já estiver logado
-//     if (localStorage.getItem("usuario_logado")) {
-//         carregarProdutos();
-//     }
-// });
-
-// // Função auxiliar para desenhar os produtos na tela
-// function renderizarLista(produtos) {
-//     const listaHTML = document.getElementById('lista-produtos');
-//     listaHTML.innerHTML = ''; 
-
-//     if (produtos.length === 0) {
-//         listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`;
-//         return;
-//     }
-
-//     produtos.forEach(produto => {
-//         listaHTML.innerHTML += `
-//             <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 border-bottom" 
-//                 onclick="abrirHistorico('${produto.nome}')" 
-//                 style="cursor: pointer;">
-                
-//                 <div class="d-flex flex-column">
-//                     <span class="fw-bold">${produto.nome}</span>
-//                     <small style="color: var(--text-muted);">Clique para histórico</small> 
-//                 </div>
-//                 <span class="text-price fw-bold fs-5">$ ${produto.preco.toFixed(2).replace('.', ',')}</span>
-//             </li>
-//         `;
-//     });
-// }
-
-// // 🔍 OUVINTE DO CAMPO DE BUSCA
-// document.addEventListener("DOMContentLoaded", () => {
-//     const inputBusca = document.getElementById('input-busca');
-//     if (inputBusca) {
-//         inputBusca.addEventListener('input', (e) => {
-//             const termo = e.target.value.toLowerCase().trim();
-            
-//             // Filtra a lista guardada na memória pelo nome do produto
-//             const produtosFiltrados = produtosGlobais.filter(produto => 
-//                 produto.nome.toLowerCase().includes(termo)
-//             );
-
-//             // Redesenha a tela apenas com os filtrados
-//             renderizarLista(produtosFiltrados);
-//         });
-//     }
-// });
