@@ -126,3 +126,63 @@ if (botaoSair) {
         navegarPara("login");
     });
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnEncerrarConta = document.getElementById("btn-encerrar-conta")
+    const btnConfirmarEncerramento = document.getElementById("btn-confirmar-encerramento")
+    const modalEncerrarEl = document.getElementById("modalEncerrarConta")
+    const modalEncerrar = modalEncerrarEl ? new mdb.Modal(modalEncerrarEl) : null
+
+    // 1. Abrir o modal ao clicar no botão
+    if (btnEncerrarConta && modalEncerrar) {
+        btnEncerrarConta.addEventListener("click", () => {
+            document.getElementById("senha-confirmacao").value = "" // Limpa o input
+            modalEncerrar.show()
+        })
+    }
+
+    // 2. Enviar a requisição POST ao confirmar ("Sim")
+    if (btnConfirmarEncerramento) {
+        btnConfirmarEncerramento.addEventListener("click", async () => {
+            const senhaDigitada = document.getElementById("senha-confirmacao").value
+
+            // Supondo que você armazena o e-mail ou CPF do usuário logado no localStorage
+            const usuarioLogado = localStorage.getItem("email_logado") || localStorage.getItem("cpf_logado")
+
+            if (!senhaDigitada) {
+                alert("Por favor, digite sua senha.")
+                return
+            }
+
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/usuario/deletar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identificador: usuarioLogado, // Envia o dado do usuário logado
+                        senha: senhaDigitada
+                    })
+                })
+
+                if (!resposta.ok) {
+                    const erroData = await resposta.json()
+                    throw new Error(erroData.error || "Erro ao encerrar a conta.")
+                }
+
+                alert("Conta encerrada com sucesso.")
+                modalEncerrar.hide()
+
+                // Limpa a sessão e redireciona para o login
+                localStorage.clear()
+                navegarPara("login")
+
+            } catch (erro) {
+                console.error("Erro:", erro)
+                alert("Falha ao encerrar conta: " + erro.message)
+            }
+        })
+    }
+})
