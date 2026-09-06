@@ -8,21 +8,29 @@ const botaoLogin = document.getElementById("btn-login")
 
 // Adicioar fução pra mostrar q o logi esta em adameto, e melhor a comuicação de erro caso acoteceça
 
-botaoLogin.disabled = true
-
+// ########################################
+// # FUNÇÔES
+// ########################################
 function verificarCampos() {
   const emailPreenchido = inputEmail.value.trim() !== ""
   const senhaPreenchida = inputSenha.value.trim() !== ""
 
   const buttonDisabled = !(emailPreenchido && senhaPreenchida)
   botaoLogin.disabled = buttonDisabled
-
-  // if (emailPreenchido && senhaPreenchida) {
-  //   botaoLogin.disabled = false
-  // } else {
-  //   botaoLogin.disabled = true
-  // }
 }
+
+function lerCampos() {
+  const pacoteDados = {
+    email: inputEmail.value,
+    senha_digitada: inputSenha.value
+  }
+  return pacoteDados
+}
+
+// ########################################
+// # INICIALIZAÇÃO
+// ########################################
+botaoLogin.disabled = true
 
 inputEmail.addEventListener("input", verificarCampos)
 
@@ -31,28 +39,21 @@ inputSenha.addEventListener("input", verificarCampos)
 formulario.addEventListener("submit", async (event) => {
   event.preventDefault()
 
-  const emailDigitado = inputEmail.value
-  const senhaDigitada = inputSenha.value
-
-  const pacoteDados = {
-    email: emailDigitado,
-    senha_digitada: senhaDigitada
-  }
-
   // 1. Salva o texto original e altera o visual do botão
   const textoOriginal = botaoLogin.innerHTML
 
-  // Adiciona o texto e o spinner animado nativo do Bootstrap
+  // 2. Adiciona o texto e o spinner animado nativo do Bootstrap
   botaoLogin.innerHTML = CONSTANTS.STYLES.SPINNER
   botaoLogin.disabled = true
 
+  // 3. Tentativa de envio da requisição POST para o servidor Flask
   try {
     const resposta = await fetch(`${CONSTANTS.API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(pacoteDados)
+      body: JSON.stringify(lerCampos())
     })
 
     const dadosRetorno = await resposta.json()
@@ -60,15 +61,18 @@ formulario.addEventListener("submit", async (event) => {
     if (resposta.ok) {
       localStorage.setItem("usuario_logado", dadosRetorno.email) // precisa verificar se funciona sem o live server]
       navegarPara("painel")
-      toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, "sucesso") // precisa alterar a resposta para receber o nome do usuário, e não o email
+      toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, CONSTANTS.MSG_SUCCESS) // precisa alterar a resposta para receber o nome do usuário, e não o email
+      inputEmail.value = ""
+      inputSenha.value = ""
     } else {
-      toastAlert(dadosRetorno.error) // erro de credenciais inválidas ?
+      toastAlert(dadosRetorno.error, CONSTANTS.MSG_ERROR) // erro de credenciais inválidas ?
     }
 
   } catch (erro) {
-    toastAlert(CONSTANTS.JS_STRINGS.COMM_ERROR) // erro de comunicação com o servidor
+    toastAlert(CONSTANTS.JS_STRINGS.COMM_ERROR, CONSTANTS.MSG_ERROR) // erro de comunicação com o servidor
   }
 
+  // Fim. Restaura o texto original e reabilita o botão
   botaoLogin.innerHTML = textoOriginal
   botaoLogin.disabled = false
 })

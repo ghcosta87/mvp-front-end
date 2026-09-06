@@ -41,6 +41,8 @@
     --btn-danger: #ef4444;
 }
 
+
+
 /* =========================================
    2. APLICANDO AS VARIÁVEIS AO PROJETO
 ========================================= */
@@ -161,6 +163,11 @@ body {
     opacity: 1 !important;
 }
 
+.card, .resultado-box, .list-group-item, .offcanvas {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
 /* =========================================
    6. TOAST DE NOTIFICAÇÃO
 ========================================= */
