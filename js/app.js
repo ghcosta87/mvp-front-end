@@ -1,130 +1,156 @@
 // ########################################
 // # ELEMENTOS DO HTML
 // ########################################
-// const botaoMenu = document.getElementByZId("btn-menu");
-// const menuLateral = document.getElementById("sidebarMenu");
-// if (botaoMenu)
-//     botaoMenu.addEventListener("click", () => {
+// const toast = document.getElementById("toast-container")
+// const textoMsg = document.getElementById("toast-mensagem")
+// const btnFechar = document.getElementById("toast-fechar")
+const toast = document.getElementById("toast-container")
+const textoMsg = document.getElementById("toast-mensagem")
 
-//         console.log("botão menu clicado!")
-//         menuLateral.classList.remove("d-none");
-//         menuLateral.style.display = "flex"
-//     });
+function toastAlert(mensagem, errorMsg) {
+    textoMsg.textContent = mensagem
+
+    const tipoClasse = !errorMsg ? "erro" : "sucesso"
+    toast.classList.add(tipoClasse)
+
+    toast.classList.add("show")
+
+    clearTimeout(toast._timeoutId)
+    toast._timeoutId = setTimeout(() => {
+        toast.classList.remove("show")
+    }, CONSTANTS.JS_CONFIG.TOAST_DURATION)
+}
+// const toastEl = document.getElementById("toast-erro")
+// const toastMsg = document.getElementById("toast-mensagem")
+// const toast = new mdb.Toast(toastEl, {
+//     delay: CONSTANTS.JS_CONFIG.TOAST_DURATION,
+//     autohide: true
+// })
+
+// function toastAlert(mensagem) {
+//     toastMsg.textContent = mensagem
+//     toast.show()
+// }
+
+// btnFechar.addEventListener("click", () => {
+//     toast.classList.remove("show")
+//     console.log("clicado pelo evento!")
+// })
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Mapeia os botões do HTML
-    const btnClaro = document.getElementById("btn-tema-claro");
-    const btnEscuro = document.getElementById("btn-tema-escuro");
-    const btnTech = document.getElementById("btn-tema-tech");
-    const sidebarEl = document.getElementById("sidebarMenu");
+    const btnClaro = document.getElementById("btn-tema-claro")
+    const btnEscuro = document.getElementById("btn-tema-escuro")
+    const btnTech = document.getElementById("btn-tema-tech")
+    const sidebarEl = document.getElementById("sidebarMenu")
 
     // 2. Função central para aplicar o tema e fechar o menu
     function aplicarTema(tema) {
         // Aplica o atributo que o CSS reconhece (ex: data-theme="tech")
         if (tema === "claro") {
-            document.body.removeAttribute("data-theme"); // O claro é o padrão sem atributo
+            document.body.removeAttribute("data-theme") // O claro é o padrão sem atributo
         } else {
-            document.body.setAttribute("data-theme", tema);
+            document.body.setAttribute("data-theme", tema)
         }
-        
+
         // Salva a escolha para não perder ao atualizar a página
-        localStorage.setItem("tema_escolhido", tema);
+        localStorage.setItem("tema_escolhido", tema)
 
         // Fecha o menu lateral suavemente após a escolha
         if (sidebarEl) {
-            const menuLateral = mdb.Offcanvas.getInstance(sidebarEl);
-            if (menuLateral) menuLateral.hide();
+            const menuLateral = mdb.Offcanvas.getInstance(sidebarEl)
+            if (menuLateral) menuLateral.hide()
         }
     }
 
     // 3. Adiciona os ouvintes de clique nos botões
-    if (btnClaro) btnClaro.addEventListener("click", () => aplicarTema("claro"));
-    if (btnEscuro) btnEscuro.addEventListener("click", () => aplicarTema("escuro"));
-    if (btnTech) btnTech.addEventListener("click", () => aplicarTema("tech"));
+    if (btnClaro) btnClaro.addEventListener("click", () => aplicarTema("claro"))
+    if (btnEscuro) btnEscuro.addEventListener("click", () => aplicarTema("escuro"))
+    if (btnTech) btnTech.addEventListener("click", () => aplicarTema("tech"))
 
     // 4. Carrega o tema salvo automaticamente ao abrir a página
-    const temaSalvo = localStorage.getItem("tema_escolhido");
+    const temaSalvo = localStorage.getItem("tema_escolhido")
     if (temaSalvo) {
-        aplicarTema(temaSalvo);
+        aplicarTema(temaSalvo)
     }
-});
+})
 
 document.addEventListener("DOMContentLoaded", () => {
-    const btnMenu = document.getElementById("btn-menu");
-    const sidebarEl = document.getElementById("sidebarMenu");
+    const btnMenu = document.getElementById("btn-menu")
+    const sidebarEl = document.getElementById("sidebarMenu")
 
     if (btnMenu && sidebarEl) {
         btnMenu.addEventListener("click", () => {
-            console.log("Abrindo menu lateral...");
-            
+            console.log("Abrindo menu lateral...")
+
             // Procura se o MDB já conhece esse menu, se não, cria a instância na hora
-            const menuLateral = mdb.Offcanvas.getInstance(sidebarEl) || new mdb.Offcanvas(sidebarEl);
-            
+            const menuLateral = mdb.Offcanvas.getInstance(sidebarEl) || new mdb.Offcanvas(sidebarEl)
+
             // Comando oficial para deslizar o menu
-            menuLateral.show(); 
-        });
+            menuLateral.show()
+        })
     }
-});
+})
 
 // Função global para alternar entre as telas da SPA
 function navegarPara(tela) {
-    const telaLogin = document.getElementById("tela-login");
-    const telaPainel = document.getElementById("tela-painel");
-    const telaCadastro = document.getElementById("tela-cadastro");
+    const telaLogin = document.getElementById("tela-login")
+    const telaPainel = document.getElementById("tela-painel")
+    const telaCadastro = document.getElementById("tela-cadastro")
 
     // Esconde todas primeiro
-    if (telaLogin) telaLogin.classList.add("d-none");
-    if (telaPainel) telaPainel.style.display = "none";
-    if (telaCadastro) telaCadastro.style.display = "none";
+    if (telaLogin) telaLogin.classList.add("d-none")
+    if (telaPainel) telaPainel.style.display = "none"
+    if (telaCadastro) telaCadastro.style.display = "none"
 
     switch (tela) {
         case "login":
-            telaLogin.classList.remove("d-none");
-            break;
+            telaLogin.classList.remove("d-none")
+            break
         case "painel":
-            telaPainel.style.display = "block";
-            telaCadastro.classList.add("d-none"); // Garante que o cadastro esteja escondido
-            break;
+            telaPainel.style.display = "block"
+            telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
+            break
         case "cadastro":
-            telaCadastro.classList.remove("d-none");
-            telaCadastro.style.display = "flex";
-            break;
+            telaCadastro.classList.remove("d-none")
+            telaCadastro.style.display = "flex"
+            break
     }
 
     // // Mostra a solicitada
     //     if (tela === "login") {
-    //         if (telaLogin) telaLogin.classList.remove("d-none");
+    //         if (telaLogin) telaLogin.classList.remove("d-none")
     //     } else if (tela === "painel") {
-    //         if (telaPainel) telaPainel.style.display = "block";
+    //         if (telaPainel) telaPainel.style.display = "block"
     //     } else if (tela === "cadastro") {
-    //         if (telaCadastro) telaCadastro.style.display = "flex"; // Usa flex para centralizar
+    //         if (telaCadastro) telaCadastro.style.display = "flex" // Usa flex para centralizar
     //     }
 }
 
 // Ouvintes globais para os botões de transição
 document.addEventListener("DOMContentLoaded", () => {
-    const btnIrCadastro = document.getElementById("btn-ir-cadastro");
-    const btnVoltarLogin = document.getElementById("btn-voltar-login");
+    const btnIrCadastro = document.getElementById("btn-ir-cadastro")
+    const btnVoltarLogin = document.getElementById("btn-voltar-login")
 
     if (btnIrCadastro) {
-        btnIrCadastro.addEventListener("click", () => navegarPara("cadastro"));
+        btnIrCadastro.addEventListener("click", () => navegarPara("cadastro"))
     }
 
     if (btnVoltarLogin) {
-        btnVoltarLogin.addEventListener("click", () => navegarPara("login"));
+        btnVoltarLogin.addEventListener("click", () => navegarPara("login"))
     }
-});
+})
 
 // 3. LÓGICA DE LOGOUT (Botão Sair)
-const botaoSair = document.getElementById("btn-sair");
+const botaoSair = document.getElementById("btn-sair")
 if (botaoSair) {
     botaoSair.addEventListener("click", () => {
         // Apaga o usuário do navegador
-        localStorage.removeItem("usuario_logado");
+        localStorage.removeItem("usuario_logado")
 
         // Volta instantaneamente para a tela inicial
-        navegarPara("login");
-    });
+        navegarPara("login")
+    })
 }
 
 
