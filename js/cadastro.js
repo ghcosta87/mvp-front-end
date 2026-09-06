@@ -44,12 +44,11 @@ formCadastro.addEventListener("submit", async (event) => {
             throw new Error(JSON.stringify(erroData.error || erroData))
         }
 
-        alert("Cadastro realizado com sucesso! Faça login para continuar.")
+        toastAlert("Cadastro realizado com sucesso! Faça login para continuar.", CONSTANTS.MSG_SUCCESS)
         formCadastro.reset()
         navegarPara("login")
 
     } catch (erro) {
-        console.error("Erro no cadastro:", erro)
-        alert("Falha no cadastro: " + erro.message)
+        toastAlert(`Falha ao cadastrar: ${erro.message}`, CONSTANTS.MSG_ERROR)
     }
 })

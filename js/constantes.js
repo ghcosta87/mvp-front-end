@@ -10,6 +10,6 @@ const CONSTANTS = {
         INVALID_CREDENTIALS: "Credenciais inválidas"
     },
     JS_CONFIG: {
-        TOAST_DURATION: 5000 // Duração do toast em milissegundos
+        TOAST_DURATION: 2500 // Duração do toast em milissegundos
     }
 };

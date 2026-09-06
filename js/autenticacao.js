@@ -64,6 +64,9 @@ formulario.addEventListener("submit", async (event) => {
       toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, CONSTANTS.MSG_SUCCESS) // precisa alterar a resposta para receber o nome do usuário, e não o email
       inputEmail.value = ""
       inputSenha.value = ""
+      // No sucesso do login
+      // localStorage.setItem("auth_token", dados.token)
+      // localStorage.setItem("usuario_logado", dadosRetorno.email) // ou email/nome, o que já usa
     } else {
       toastAlert(dadosRetorno.error, CONSTANTS.MSG_ERROR) // erro de credenciais inválidas ?
     }

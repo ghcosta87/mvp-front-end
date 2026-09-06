@@ -50,15 +50,16 @@ function aplicarTema(tema) {
 }
 
 function navegarPara(tela) {
-    if (telaLogin) telaLogin.classList.add("d-none")
-    if (telaPainel) telaPainel.style.display = "none"
-    if (telaCadastro) telaCadastro.style.display = "none"
+    // if (telaLogin) telaLogin.classList.add("d-none")
+    // if (telaPainel) telaPainel.style.display = "none"
+    // if (telaCadastro) telaCadastro.style.display = "none"
 
     switch (tela) {
         case "login":
             telaLogin.classList.remove("d-none")
             break
         case "painel":
+            telaLogin.classList.add("d-none")
             telaPainel.style.display = "block"
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
             break
@@ -137,3 +138,85 @@ btnConfirmarEncerramento.addEventListener("click", async () => {
         toastAlert(`Falha ao encerrar conta: ${erro.message}`, CONSTANTS.MSG_ERROR)
     }
 })
+
+// ########################################
+// # ÁREA DE TESTES
+// ########################################
+
+const btnUpload = document.getElementById("btn-upload")
+// const inputComprovante = document.getElementById("input-comprovante")
+
+function setUploadLoading(ativo) {
+    if (ativo) {
+        btnUpload.dataset.iconeOriginal = btnUpload.innerHTML // guarda o ícone original
+        btnUpload.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+        btnUpload.classList.add("disabled") // impede novo clique visualmente
+        btnUpload.style.pointerEvents = "none" // impede clique de fato (label não tem "disabled" nativo)
+        inputComprovante.disabled = true
+    } else {
+        btnUpload.innerHTML = btnUpload.dataset.iconeOriginal
+        btnUpload.classList.remove("disabled")
+        btnUpload.style.pointerEvents = "auto"
+        inputComprovante.disabled = false
+    }
+}
+
+function enviarComprovanteComProgresso(arquivo) {
+    return new Promise((resolve, reject) => {
+        const formData = new FormData()
+        formData.append("imagem", arquivo)
+
+        const xhr = new XMLHttpRequest()
+        xhr.open("POST", `${CONSTANTS.API_URL}/upload`)
+
+        xhr.upload.addEventListener("progress", (e) => {
+            if (e.lengthComputable) {
+                const percentual = Math.round((e.loaded / e.total) * 100)
+                console.log(`Progresso: ${percentual}%`)
+                // aqui você atualizaria uma barra de progresso, ex:
+                // barraProgresso.style.width = percentual + "%"
+            }
+        })
+
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve(JSON.parse(xhr.responseText))
+            } else {
+                reject(new Error(JSON.parse(xhr.responseText)?.error || "Erro no upload"))
+            }
+        }
+
+        xhr.onerror = () => reject(new Error("Erro de rede no upload"))
+
+        xhr.send(formData)
+    })
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("auth_token")
+
+    if (token) {
+        // Opcional, mas recomendado: valida o token com o backend antes de confiar nele
+        verificarToken(token)
+    } else {
+        navegarPara("login")
+    }
+})
+
+async function verificarToken(token) {
+    try {
+        const resposta = await fetch(`${CONSTANTS.API_URL}/verificar-token`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+
+        if (resposta.ok) {
+            navegarPara("painel") // token válido, pula o login
+        } else {
+            localStorage.removeItem("auth_token")
+            navegarPara("login")
+        }
+    } catch (erro) {
+        navegarPara("login")
+    }
+}

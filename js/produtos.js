@@ -39,6 +39,7 @@ async function carregarProdutos() {
 // o que vem primeiro? faz diferença? essa função é usada acima, não tem q ser declarada primeiro?
 // 2. Função centralizada para desenhar os produtos (evita código duplicado)
 function renderizarLista(produtos) {
+    // tem q ajustar a lista, não é pra renderizar produtos repetidos é preciso agrupar os valores do mesmo produto com relação as datas
     if (!listaHTML) return;
 
     listaHTML.innerHTML = '';

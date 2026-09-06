@@ -6,7 +6,7 @@ const videoElement = document.getElementById("video-camera");
 
 // const canvas = document.getElementById('canvas');
 const canvas = document.getElementById("canvas-camera");
-const inputComprovante = document.getElementById("input-comprovante");
+// const inputComprovante = document.getElementById("input-comprovante");
 
 // const btnCapturar = document.getElementById('btnCapturar');
 // const btnToggleCamera = document.getElementById('btnToggleCamera');
@@ -69,13 +69,19 @@ async function postImage(dataIn) {
         .then(data => {
             resultadoDiv.innerText = "✅ Produto capturado com sucesso!";
 
+            toastAlert(`Produto capturado com sucesso! ${data}`, CONSTANTS.MSG_SUCCESS)
+
             if (typeof carregarProdutos === "function") {
                 carregarProdutos();
             }
         })
         .catch(err => {
             resultadoDiv.innerText = "Erro ao processar: " + err;
+            toastAlert("Erro ao processar: " + err, CONSTANTS.MSG_ERROR)
         });
+
+
+        
 }
 
 if (videoElement && canvas && btnCapturarFoto && modalCamera && resultadoDiv)
