@@ -38,32 +38,7 @@ async function carregarProdutos() {
 
 // o que vem primeiro? faz diferença? essa função é usada acima, não tem q ser declarada primeiro?
 // 2. Função centralizada para desenhar os produtos (evita código duplicado)
-function renderizarLista(produtos) {
-    // tem q ajustar a lista, não é pra renderizar produtos repetidos é preciso agrupar os valores do mesmo produto com relação as datas
-    if (!listaHTML) return;
 
-    listaHTML.innerHTML = '';
-
-    if (produtos.length === 0) {
-        listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`;
-        return;
-    }
-
-    produtos.forEach(produto => {
-        listaHTML.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 border-bottom" 
-                onclick="abrirHistorico('${produto.nome}')" 
-                style="cursor: pointer;">
-                
-                <div class="d-flex flex-column">
-                    <span class="fw-bold">${produto.nome}</span>
-                    <small style="color: var(--text-muted);">Clique para histórico</small> 
-                </div>
-                <span class="text-price fw-bold fs-5">R$ ${produto.preco.toFixed(2).replace('.', ',')}</span>
-            </li>
-        `;
-    });
-}
 
 // 3. Lógica do Modal de Histórico de Preços
 function abrirHistorico(nomeDoProduto) {
@@ -187,14 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })
 
-
-const telaPainel2 = document.getElementById("tela-painel");
-telaPainel2.addEventListener("click", () => {
-    console.log("evento na tela do painel 2");
-    // telaPainel.style.display = "block";
-    //o eveto precisa estar relacioado com o style display chage
-})
-
 document.addEventListener("DOMContentLoaded", () => {
     // Carrega os produtos se o usuário estiver logado
     userState = localStorage.getItem("usuario_logado")
@@ -202,8 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("usuario_logado")) {
         console.log("Usuário está logado...");
         console.log(`{userState}`)
+        navegarPara('painel')
         carregarProdutos();
     } else {
+        navegarPara('login')
         console.log("Usuário não logado. Redirecionando para login...");
         console.log(`{userState}`)
     }

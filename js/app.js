@@ -64,6 +64,7 @@ function navegarPara(tela) {
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
             break
         case "cadastro":
+            telaLogin.classList.add("d-none")
             telaCadastro.classList.remove("d-none")
             telaCadastro.style.display = "flex"
             break
@@ -196,12 +197,12 @@ function enviarComprovanteComProgresso(arquivo) {
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("auth_token")
 
-    if (token) {
-        // Opcional, mas recomendado: valida o token com o backend antes de confiar nele
-        verificarToken(token)
-    } else {
-        navegarPara("login")
-    }
+    // if (token) {
+    //     // Opcional, mas recomendado: valida o token com o backend antes de confiar nele
+    //     verificarToken(token)
+    // } else {
+    //     navegarPara("login")
+    // }
 })
 
 async function verificarToken(token) {
@@ -210,12 +211,12 @@ async function verificarToken(token) {
             headers: { "Authorization": `Bearer ${token}` }
         })
 
-        if (resposta.ok) {
-            navegarPara("painel") // token válido, pula o login
-        } else {
-            localStorage.removeItem("auth_token")
-            navegarPara("login")
-        }
+        // if (resposta.ok) {
+        //     navegarPara("painel") // token válido, pula o login
+        // } else {
+        //     localStorage.removeItem("auth_token")
+        //     navegarPara("login")
+        // }
     } catch (erro) {
         navegarPara("login")
     }
