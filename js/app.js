@@ -54,11 +54,15 @@ function navegarPara(tela) {
     // if (telaPainel) telaPainel.style.display = "none"
     // if (telaCadastro) telaCadastro.style.display = "none"
 
+    const loading = document.getElementById("loading-produtos")
+
     switch (tela) {
         case "login":
+            telaCadastro.classList.add("d-none")
             telaLogin.classList.remove("d-none")
             break
         case "painel":
+            loading.style.display = "inline-block"
             telaLogin.classList.add("d-none")
             telaPainel.style.display = "block"
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
@@ -74,6 +78,17 @@ function navegarPara(tela) {
 // ########################################
 // # INICIALIZAÇÃO
 // ########################################
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("cotet loaded")
+    userState = localStorage.getItem("usuario_logado")
+
+    if (localStorage.getItem("usuario_logado")) {
+        navegarPara('painel')
+        carregarProdutos()
+    } else navegarPara('login')
+
+})
+
 btnClaro.addEventListener("click", () => aplicarTema("claro"))
 
 btnEscuro.addEventListener("click", () => aplicarTema("escuro"))
@@ -101,43 +116,6 @@ botaoSair.addEventListener("click", () => {
 btnEncerrarConta.addEventListener("click", () => {
     document.getElementById("senha-confirmacao").value = "" // Limpa o input
     modalEncerrar.show()
-})
-
-btnConfirmarEncerramento.addEventListener("click", async () => {
-    const senhaDigitada = document.getElementById("senha-confirmacao").value
-    const usuarioLogado = localStorage.getItem("email_logado") || localStorage.getItem("cpf_logado")
-
-    if (!senhaDigitada) {
-        toastAlert("Por favor, digite sua senha.", CONSTANTS.MSG_ERROR)
-        return
-    }
-
-    try {
-        const resposta = await fetch(`${CONSTANTS.API_URL}/usuario/deletar`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                identificador: usuarioLogado,
-                senha: senhaDigitada
-            })
-        })
-
-        if (!resposta.ok) {
-            const erroData = await resposta.json()
-            throw new Error(erroData.error)
-        }
-
-        toastAlert("Conta encerrada com sucesso.", CONSTANTS.MSG_SUCCESS)
-        modalEncerrar.hide()
-
-        localStorage.clear()
-        navegarPara("login")
-
-    } catch (erro) {
-        toastAlert(`Falha ao encerrar conta: ${erro.message}`, CONSTANTS.MSG_ERROR)
-    }
 })
 
 // ########################################
@@ -193,10 +171,10 @@ function enviarComprovanteComProgresso(arquivo) {
     })
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("auth_token")
 
+    aplicarTema(localStorage.getItem("tema_escolhido"))
     // if (token) {
     //     // Opcional, mas recomendado: valida o token com o backend antes de confiar nele
     //     verificarToken(token)

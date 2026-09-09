@@ -196,7 +196,13 @@
 
         <!-- Lista de Produtos -->
         <div class="mx-auto" style="max-width: 500px;">
-            <h5 class="mb-3 text-center fw-bold">Produtos Capturados</h5>
+            <h5 class="mb-3 text-center fw-bold">
+                Produtos Capturados
+                <span id="loading-produtos" style="display: none; margin-left: 10px; vertical-align: middle;">
+                    <!-- Spinner nativo do Bootstrap -->
+                    <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
+                </span>
+            </h5>
 
             <ul class="list-group list-group-flush" id="lista-produtos">
                 <!-- Os itens virão do Javascript -->
@@ -231,6 +237,10 @@
                     <ul class="list-group list-group-flush" id="listaHistorico">
                         <!-- Dados inseridos via JS -->
                     </ul>
+                </div>
+                <!-- Gráfico-->>
+                <div class="mt-4">
+                    <canvas id="graficoHistorico"></canvas>
                 </div>
 
                 <!-- Rodapé -->
@@ -304,7 +314,7 @@
 
 
     <!-- 2º: As constantes carregam primeiro na memória -->
-    <script src="js/elements.js" defer></script> 
+    <script src="js/elements.js" defer></script>
     <script src="js/constantes.js" defer></script>
 
     <!-- 3º: O arquivo principal que orquestra tudo -->
@@ -316,6 +326,9 @@
     <script src="js/upload.js" defer></script>
     <script src="js/produtos.js" defer></script>
     <script src="js/cadastro.js" defer></script>
+
+    <!-- 5º: Outros scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" defer></script>
 </body>
 
 </html>

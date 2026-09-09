@@ -4,6 +4,7 @@
 const formCadastro = document.getElementById("form-cadastro")
 const inputCpf = document.getElementById("cad-cpf")
 const inputTelefone = document.getElementById("cad-telefone")
+const buttonBack = document.getElementById("btn-voltar-login")
 
 inputTelefone.addEventListener("input", (e) => {
     // adicionar formatação do campo de telefone
@@ -21,6 +22,12 @@ inputCpf.addEventListener("input", (e) => {
     e.target.value = valor
 })
 
+buttonBack.addEventListener("submit", async (event) => {
+    event.preventDefault()
+    navegarPara("login")
+})
+
+// ao terminar o cadastro tem q acertar a navegação, painel esta aparecendo junto com login
 formCadastro.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -50,5 +57,41 @@ formCadastro.addEventListener("submit", async (event) => {
 
     } catch (erro) {
         toastAlert(`Falha ao cadastrar: ${erro.message}`, CONSTANTS.MSG_ERROR)
+    }
+})
+
+btnConfirmarEncerramento.addEventListener("click", async () => {
+    const senhaDigitada = document.getElementById("senha-confirmacao").value
+    if (!senhaDigitada) {
+        toastAlert("Por favor, digite sua senha.", CONSTANTS.MSG_ERROR)
+        return
+    }
+
+    const formData = new FormData()
+    formData.append("email", localStorage.getItem("usuario_logado"))
+    formData.append("senha_digitada", senhaDigitada)
+
+    // const usuarioLogado = || localStorage.getItem("cpf_logado")
+    console.log(`Tentando encerrar conta do usuário: ${localStorage.getItem("usuario_logado")} e senha digitada: ${senhaDigitada}`)
+
+    try {
+        const resposta = await fetch(`${CONSTANTS.API_URL}/deletar_usuario`, {
+            method: "POST",
+            body: formData
+        })
+
+        if (!resposta.ok) {
+            const erroData = await resposta.json()
+            throw new Error(erroData.error) //erro 422 acontece
+        }
+
+        toastAlert("Conta encerrada com sucesso.", CONSTANTS.MSG_SUCCESS)
+        modalEncerrar.hide()
+
+        localStorage.clear()
+        navegarPara("login")
+
+    } catch (erro) {
+        toastAlert(`Falha ao encerrar conta: ${erro.message}`, CONSTANTS.MSG_ERROR)
     }
 })
