@@ -37,11 +37,6 @@ async function carregarProdutos() {
             estatisticasGlobais = dados.estatisticas || []
             historicoGlobal = dados.historico || []
 
-            // console.log("tentado renderizar a lista ...")
-            // console.log(`tuplas de produtos: ${produtosGlobais}`)
-            // console.log(`tuplas de estatistica: ${estatisticasGlobais}`)
-            // console.log(`tuplas de historico: ${historicoGlobal}`)
-
             renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais })
         } catch (erro) {
             console.error("Erro na listagem:", erro)
@@ -131,7 +126,7 @@ function abrirHistorico(nomeDoProduto) {
         listaHTML.innerHTML += `
             <li class="list-group-item d-flex justify-content-between bg-transparent px-0 border-bottom">
                 <span style="color: var(--text-muted)">${item.data}</span>
-                <span class="fw-bold">${item.preco}</span>
+                <span class="fw-bold"> ${item.preco}</span>
             </li>
         `
     })
@@ -163,33 +158,17 @@ const filtrarProdutos = () => {
         const estatisticasFiltradas = estatisticasGlobais.filter(filtro =>
             filtro.nome.toLowerCase().includes(termo)
         )
-        // console.log(produtosFiltrados, estatisticasFiltradas)
-
-        // Atualiza a tela instantaneamente
-        // renderizarLista(produtosFiltrados, estatisticasFiltradas)
-
-        // console.log(`tuplas de produtos: ${JSON.stringify(produtosFiltrados)}`)
-        // console.log(`tuplas de estatistica: ${JSON.stringify(estatisticasFiltradas)}`)
-        // console.log(`tuplas de historico: ${JSON.stringify(historicoGlobal)}`)
         filtro = true
         renderizarLista({ produtos: produtosFiltrados, estatisticas: estatisticasFiltradas, historico: historicoGlobal })
         return
-        // })
     }
     filtro = false
     renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais, historico: historicoGlobal })
 }
 
-// 4. Inicializadores e Ouvintes ao carregar a página
-
-
-
 // Função centralizada para desenhar os produtos
 function renderizarLista({ produtos, estatisticas, historico }) {
-    // function renderizarLista({ produtosFiltrados: produtos, estatisticasFiltradas: estatistica }) {
     console.log("tentado renderizar a lista com os produtos: ")
-    // console.log(`tuplas de produtos: ${produtos}`)
-    console.log(`tuplas de estatistica: ${JSON.stringify(estatisticas)}`)
 
     if (!listaHTML) return
 
@@ -207,21 +186,7 @@ function renderizarLista({ produtos, estatisticas, historico }) {
     estatisticas.forEach(item => {
         // dados do painel
         console.log(item.nome, item.preco_medio)
-        listaHTML.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 border-bottom">
-                
-                <div class="d-flex align-items-center gap-3">
-                    <input class="form-check-input produto-cb fs-5" type="checkbox" value="${item.nome}" onclick="event.stopPropagation()">
-                    
-                    <div class="d-flex flex-column" onclick="abrirHistorico('${item.nome}')" style="cursor: pointer">
-                        <span class="fw-bold">${item.nome}</span>
-                        <small style="color: var(--text-muted)">Clique para histórico</small> 
-                    </div>
-                </div>
-
-                <span class="text-price fw-bold fs-5">$ ${item.preco_medio.toFixed(2).replace('.', ',')}</span>
-            </li>
-        `;
+        listaHTML.innerHTML += CONSTANTS.LISTA_HTML.REV1(item.nome,item.preco_medio)
         //dados do modal
 
 

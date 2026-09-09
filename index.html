@@ -23,38 +23,7 @@
         <div id="toast-mensagem" class="toast-msg">Mensagem de erro aqui</div>
     </div>
 
-    <!-- ================= 1. MENU LATERAL (OFFCANVAS) ================= -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" style="width: 25%;">
-        <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title fw-bold">Menu</h5>
-            <button type="button" class="btn-close" data-mdb-dismiss="offcanvas" aria-label="Fechar"></button>
-        </div>
 
-        <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
-            <!-- Parte Superior: Temas -->
-            <div class="d-flex flex-column gap-2">
-                <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
-                    <i class="fas fa-sun me-2"></i> Claro
-                </button>
-                <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
-                    <i class="fas fa-moon me-2"></i> Escuro
-                </button>
-                <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
-                    <i class="fas fa-microchip me-2"></i> Tech
-                </button>
-            </div>
-
-            <!-- Parte Inferior: Gerenciamento de Conta -->
-            <div class="d-flex flex-column gap-2 mt-auto">
-                <button id="btn-encerrar-conta" class="btn btn-outline-danger text-start w-100">
-                    <i class="fas fa-user-times me-2"></i> Encerrar Conta
-                </button>
-                <button id="btn-sair" class="btn btn-danger text-start w-100">
-                    <i class="fas fa-sign-out-alt me-2"></i> Sair
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- ==========================================
          TELA 1: LOGIN (Visível por padrão)
@@ -96,12 +65,6 @@
             <div class="container-fluid px-0 mb-4 mt-3">
                 <div class="d-flex align-items-center gap-2 w-100">
                     <!-- Botão Abrir Menu Lateral -->
-                    <!-- <button id="btn-menu" class="btn btn-secondary px-3 shadow-sm" type="button"
-                        data-mdb-toggle="offcanvas" data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu"
-                        title="Menu">
-                        <i class="fas fa-bars"></i>
-                    </button> -->
-                    <!-- Botão Abrir Menu Lateral (Sem atributos data-mdb) -->
                     <button id="btn-menu" class="btn btn-secondary px-3 shadow-sm" type="button" title="Menu">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -110,25 +73,6 @@
                     <div class="form-outline flex-grow-1 mb-0" data-mdb-input-init>
                         <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
                     </div>
-
-                    <!-- Botão Vincular -->
-                    <button id="btn-vincular" class="btn btn-warning text-white shadow-sm px-3 text-nowrap">
-                        <i class="fas fa-link me-1"></i> Vincular
-                    </button>
-
-                    <!-- Ícone: Abrir Câmera -->
-                    <button type="button" id="btn-abrir-camera" class="btn btn-primary px-3 shadow-sm"
-                        title="Abrir Câmera">
-                        <i class="fas fa-camera"></i>
-                    </button>
-
-                    <!-- Ícone: Anexar Arquivo -->
-                    <label for="input-comprovante" id="btn-upload"
-                        class="btn btn-outline-primary mb-0 px-3 shadow-sm d-flex align-items-center justify-content-center"
-                        style="cursor: pointer; height: 38px;" title="Anexar Arquivo">
-                        <i class="fas fa-upload"></i>
-                    </label>
-                    <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
                 </div>
             </div>
 
@@ -189,33 +133,109 @@
                 </div>
             </div>
         </div>
-
         </div>
-
         <hr class="my-4">
-
         <!-- Lista de Produtos -->
-        <div class="mx-auto" style="max-width: 500px;">
-            <h5 class="mb-3 text-center fw-bold">
-                Produtos Capturados
-                <span id="loading-produtos" style="display: none; margin-left: 10px; vertical-align: middle;">
-                    <!-- Spinner nativo do Bootstrap -->
-                    <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
-                </span>
-            </h5>
+        <!-- O contêiner principal ganha bordas arredondadas e corta o que vazar -->
+        <ul class="list-group rounded-4 overflow-hidden shadow-sm">
 
-            <ul class="list-group list-group-flush" id="lista-produtos">
-                <!-- Os itens virão do Javascript -->
-            </ul>
-            <!-- <div class="form-outline mb-3" data-mdb-input-init>
+            <!-- Cada item ganha px-3 para desgrudar o conteúdo das laterais -->
+            <li
+                class="list-group-item d-flex justify-content-between align-items-center px-3 py-2 text-bg-dark border-secondary">
+
+                <div class="w-100">
+                    <h5 class="mb-3 text-center fw-bold">
+                        Produtos Capturados
+                        <span id="loading-produtos" style="display: none; margin-left: 10px; vertical-align: middle;">
+                            <!-- Spinner nativo do Bootstrap -->
+                            <span class="spinner-border spinner-border-sm text-primary" role="status"
+                                aria-hidden="true"></span>
+                        </span>
+                    </h5>
+
+                    <ul class="list-group list-group-flush" id="lista-produtos">
+                        <!-- Os itens virão do Javascript -->
+                    </ul>
+                    <!-- <div class="form-outline mb-3" data-mdb-input-init>
                     <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
                 </div>
 
                 <ul class="list-group list-group-flush" id="lista-produtos">
                 </ul> -->
-        </div>
+                </div>
+            </li>
+        </ul>
         </div>
     </section>
+    <!-- ==========================================
+ 1. MENU LATERAL (OFFCANVAS) 
+=========================================== -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" style="width: 25%;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold">Menu</h5>
+            <button type="button" class="btn-close" data-mdb-dismiss="offcanvas" aria-label="Fechar"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
+
+            <div class="d-flex flex-column gap-3">
+
+                <!-- Grupo: Ações de Produto -->
+                <div>
+                    <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Produtos</small>
+                    <div class="d-flex flex-column gap-2 mt-2">
+                        <button id="btn-adicionar-manual" class="btn btn-outline-success text-start w-100"
+                            title="Adicionar Manualmente">
+                            <i class="fas fa-plus me-2"></i> Novo Produto
+                        </button>
+                        <button type="button" id="btn-abrir-camera" class="btn btn-outline-primary text-start w-100"
+                            title="Abrir Câmera">
+                            <i class="fas fa-camera me-2"></i> Escanear com Câmera
+                        </button>
+                        <label for="input-comprovante" id="btn-upload"
+                            class="btn btn-outline-primary text-start w-100 mb-0" style="cursor: pointer;"
+                            title="Anexar Arquivo">
+                            <i class="fas fa-upload me-2"></i> Anexar Arquivo
+                        </label>
+                        <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
+                        <button id="btn-vincular" class="btn btn-outline-warning text-start w-100">
+                            <i class="fas fa-link me-2"></i> Vincular Produtos
+                        </button>
+                    </div>
+                </div>
+
+                <hr class="my-2">
+
+                <!-- Grupo: Temas -->
+                <div>
+                    <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Aparência</small>
+                    <div class="d-flex flex-column gap-2 mt-2">
+                        <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
+                            <i class="fas fa-sun me-2"></i> Claro
+                        </button>
+                        <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
+                            <i class="fas fa-moon me-2"></i> Escuro
+                        </button>
+                        <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
+                            <i class="fas fa-microchip me-2"></i> Tech
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Grupo: Gerenciamento de Conta -->
+            <div class="d-flex flex-column gap-2 mt-auto">
+                <button id="btn-encerrar-conta" class="btn btn-outline-danger text-start w-100">
+                    <i class="fas fa-user-times me-2"></i> Encerrar Conta
+                </button>
+                <button id="btn-sair" class="btn btn-danger text-start w-100">
+                    <i class="fas fa-sign-out-alt me-2"></i> Sair
+                </button>
+            </div>
+
+        </div>
+    </div>
 
     <!-- MODAL DE HISTÓRICO DE PREÇOS -->
     <div class="modal fade" id="modalHistorico" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">

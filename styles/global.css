@@ -248,3 +248,216 @@ body {
     font-family: sans-serif;
     max-width: 350px;
 }
+/* ===================================================
+   ESTILO MODERNO PARA A LISTA DE PRODUTOS (CARDS)
+=================================================== */
+
+/* 1. Transforma o container da lista para aceitar o espaçamento (gap) */
+#lista-produtos {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important; /* Espaço "respirável" entre os cards */
+    background: transparent !important; /* Remove o fundo branco/cinza padrão */
+    padding: 10px 0 !important;
+}
+
+/* 2. Força cada <li> a se comportar como um Card independente e arredondado */
+#lista-produtos .list-group-item {
+    background-color: #1a1c20 !important; /* Fundo escuro suave */
+    border: 1px solid #2d3035 !important; /* Borda super sutil */
+    border-radius: 12px !important; /* Arredonda TODOS os cantos de CADA item */
+    padding: 16px 20px !important;
+    margin-bottom: 0 !important; /* Previne margens extras do Bootstrap */
+    transition: all 0.2s ease-in-out !important; /* Prepara para a animação */
+}
+
+/* 3. Efeito ao passar o mouse (Hover) - O card levanta e "acende" */
+#lista-produtos .list-group-item:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-3px) !important; /* Levanta o card levemente */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important; /* Sombra projetada */
+}
+
+/* 4. Estiliza o checkbox para ficar mais limpo */
+#lista-produtos .form-check-input {
+    width: 1.3em;
+    height: 1.3em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+/* 5. Animação de cor no título quando o mouse passa no card */
+#lista-produtos .list-group-item:hover .nome-produto-card {
+    color: #00d2a0 !important; /* Fica verde combinando com o preço */
+}
+
+/* Oculta a borda do contêiner "pai" que você usou no HTML para não criar caixas duplas */
+.text-bg-dark.border-secondary {
+    border-color: transparent !important;
+    background-color: transparent !important;
+}
+
+/* ===================================================
+   COMPORTAMENTO RESPONSIVO DO MENU (LARGURA > ALTURA)
+=================================================== */
+
+@media (orientation: landscape) {
+    /* 1. Fixa o menu na esquerda e anula o efeito de gaveta invisível */
+    #sidebarMenu {
+        transform: none !important;
+        visibility: visible !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.3) !important; /* Sombra moderna para separar */
+        z-index: 1040;
+    }
+
+    /* 2. Oculta o botão de hambúrguer, pois o menu já está exposto */
+    #btn-menu {
+        display: none !important;
+    }
+
+    /* 3. Empurra todo o painel para a direita. 
+          Usamos 25% porque é o exato tamanho do width do seu menu no HTML. */
+    #tela-painel {
+        padding-left: 25% !important;
+    }
+
+    /* 4. Esconde a máscara escura (backdrop) do MDBootstrap, caso ele tente abrir */
+    .offcanvas-backdrop {
+        display: none !important;
+    }
+    
+    /* 5. Garante que a tela continue com rolagem caso o JS tente bloquear */
+    body {
+        overflow-y: auto !important;
+        padding-right: 0 !important;
+    }
+}
+/* 1. Transforma o container em um Grid Responsivo */
+#lista-produtos {
+    display: grid !important;
+    /* Essa é a linha de ouro: Cria colunas que têm no mínimo 320px e crescem para preencher o resto */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 16px !important; /* Espaço entre os cards (vertical e horizontal) */
+    background: transparent !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* 2. Mantém os cards arredondados e com efeito hover (mesmas regras de antes) */
+#lista-produtos .list-group-item {
+    background-color: #1a1c20 !important;
+    border: 1px solid #2d3035 !important;
+    border-radius: 12px !important;
+    padding: 16px 20px !important;
+    margin-bottom: 0 !important;
+    transition: all 0.2s ease-in-out !important;
+    /* Garante que o card ocupe 100% do espaço da sua célula no grid */
+    height: 100%; 
+}
+
+#lista-produtos .list-group-item:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+#lista-produtos .form-check-input {
+    width: 1.3em;
+    height: 1.3em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+#lista-produtos .list-group-item:hover .nome-produto-card {
+    color: #00d2a0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Container do Grid */
+#lista-produtos {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 16px !important;
+    background: transparent !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* O Card de cada produto */
+#lista-produtos .list-group-item.card-produto-grid {
+    background-color: #1a1c20 !important;
+    border: 1px solid #2d3035 !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    cursor: pointer !important; /* Transforma o mouse em mãozinha em todo o card */
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Efeito Hover do Card */
+#lista-produtos .list-group-item.card-produto-grid:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+#lista-produtos .list-group-item.card-produto-grid:hover .nome-produto-card {
+    color: #00d2a0 !important;
+}
+
+/* Checkbox */
+#lista-produtos .form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+/* Área do Nome do Produto (Ocupa o espaço que sobra e quebra linha perfeitamente) */
+.nome-produto-container {
+    flex: 1 !important;
+    min-width: 0 !important; /* Impede o flexbox de estourar o card */
+}
+
+.nome-produto-card {
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important; /* Quebra palavras longas se necessário */
+    transition: color 0.2s;
+}
+
+/* Área do Preço (Força pelo menos 30% de espaço e alinha à direita) */
+.preco-produto-container {
+    flex: 0 0 30% !important; /* Trava o espaço em 30% do card */
+    text-align: right !important;
+}
+
+.preco-texto {
+    font-size: 1.05rem !important;
+    white-space: nowrap !important; /* Garante que o cifrão e o número nunca se separem */
+}
