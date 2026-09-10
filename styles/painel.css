@@ -1,0 +1,8 @@
+.barra-busca-fixa {
+    position: sticky;
+    top: 0;
+    z-index: 100; /* garante que fique por cima da lista de produtos ao rolar */
+    background-color: var(--bg-page); /* evita que o conteúdo "passe por trás" transparente */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

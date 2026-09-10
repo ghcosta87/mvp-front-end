@@ -60,17 +60,20 @@ function navegarPara(tela) {
         case "login":
             telaCadastro.classList.add("d-none")
             telaLogin.classList.remove("d-none")
+            sidebarEl.classList.add("d-none")
             break
         case "painel":
             loading.style.display = "inline-block"
             telaLogin.classList.add("d-none")
-            telaPainel.style.display = "block"
+            telaPainel.style.display = "block"            
+            sidebarEl.classList.remove("d-none")
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
             break
         case "cadastro":
             telaLogin.classList.add("d-none")
             telaCadastro.classList.remove("d-none")
-            telaCadastro.style.display = "flex"
+            telaCadastro.style.display = "flex"            
+            sidebarEl.classList.add("d-none")
             break
     }
 }
