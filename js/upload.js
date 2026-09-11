@@ -14,7 +14,7 @@ inputComprovante.addEventListener("change", (e) => {
     enviarComprovante(arquivo)
 })
 
-async function postPicture(dataIn,avisoDemora) {
+async function postPicture(dataIn, avisoDemora) {
     fetch(`${CONSTANTS.API_URL}/upload`, {
         method: 'POST',
         body: dataIn
@@ -34,10 +34,10 @@ async function postPicture(dataIn,avisoDemora) {
             resultadoDiv.innerText = "Erro ao processar: " + err
             toastAlert("Erro ao processar: " + err, CONSTANTS.MSG_ERROR)
         })
-        // ERRO nao esta retornando mensagem, esta retornando mensagem de sucesso.
-        //
-        // navegarPara("painel") // reload page to main page
-        // reload page to main page
+    // ERRO nao esta retornando mensagem, esta retornando mensagem de sucesso.
+    //
+    // navegarPara("painel") // reload page to main page
+    // reload page to main page
 }
 
 async function enviarComprovante(arquivo) {
@@ -58,7 +58,7 @@ async function enviarComprovante(arquivo) {
         console.log("Erro ao enviar o comprovante:", e)
         toastAlert("Erro ao enviar o comprovante: " + e.message, CONSTANTS.MSG_ERROR)
 
-    } 
+    }
     // finally {
 
     //     // clearTimeout(avisoDemora) // cancela o aviso se já terminou antes dos 3s
@@ -84,3 +84,7 @@ async function enviarComprovante(arquivo) {
     //     toastAlert(er.error || er.message, CONSTANTS.MSG_ERROR)
     // }
 }
+
+// ########################################
+// # EVENTOS LOCAIS
+// ########################################

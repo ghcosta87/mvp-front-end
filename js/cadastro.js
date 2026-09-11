@@ -1,11 +1,6 @@
 // ########################################
-// # ELEMENTOS DO HTML
+// # EVENTOS LOCAIS
 // ########################################
-const formCadastro = document.getElementById("form-cadastro")
-const inputCpf = document.getElementById("cad-cpf")
-const inputTelefone = document.getElementById("cad-telefone")
-const buttonBack = document.getElementById("btn-voltar-login")
-
 inputTelefone.addEventListener("input", (e) => {
     // adicionar formatação do campo de telefone
 })

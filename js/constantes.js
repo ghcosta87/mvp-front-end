@@ -7,8 +7,11 @@ const CONSTANTS = {
         LOADING: `Carregando <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>`
     },
     JS_STRINGS: {
-        COMM_ERROR: "Erro ao conectar no servidor Flask.",
-        INVALID_CREDENTIALS: "Credenciais inválidas"
+        HTML_COMM_ERROR: `<li class="list-group-item text-center bg-transparent text-danger px-0">Falha ao carregar produtos. O servidor parece que está offline 😢</li>`,
+        HTML_PRODUCT_LIST_EMPY: `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`,
+        INVALID_CREDENTIALS: "Credenciais inválidas",
+        OFFLINE_SERVER: "O servidor parece que está offline 😢",
+        USER_NOT_FOUND: "Usuário não encontrado"
     },
     JS_CONFIG: {
         TOAST_DURATION: 2500 // Duração do toast em milissegundos
@@ -55,5 +58,15 @@ const CONSTANTS = {
     </li>
 `;
         },
+    },
+    PRODUCT_BOX_HTML: {
+        REV0: (item) => {
+            listaHTML.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between bg-transparent px-0 border-bottom">
+                <span style="color: var(--text-muted)">${item.data}</span>
+                <span class="fw-bold"> ${item.preco}</span>
+            </li>
+        `
+        }
     }
 };

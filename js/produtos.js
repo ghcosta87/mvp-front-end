@@ -1,71 +1,84 @@
 // ########################################
-// # VÁRIAVEIS GLOBAIS
+// # VÁRIAVEIS LOCAIS
 // ########################################
 let campoDeBusca
 let filtro
 let produtosGlobais = []
 let estatisticasGlobais = []
 let historicoGlobal = []
+let graficoAtual = null
 
 // ########################################
-// # ELEMENTOS DO HTML
-// ########################################
-const listaHTML = document.getElementById('lista-produtos')
-const btnVincular = document.getElementById("btn-vincular")
-const inputBusca = document.getElementById('input-busca')
-const loading = document.getElementById("loading-produtos")
-
-// ########################################
-// # FUÇÕES LOCAIS
+// # FUNÇÕES LOCAIS
 // ########################################
 async function carregarProdutos() {
-    console.log("carregando produtos ...")
-    if (listaHTML)
-        try {
-            const resposta = await fetch(`${CONSTANTS.API_URL}/produtos`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            //precisa melhorar esse tratameto de erro
-            if (!resposta.ok) throw new Error("Erro ao buscar dados do servidor")
-            const dados = await resposta.json()
-            // Salva na variável global os produtos vindos do ListagemProdutosSchema
-            produtosGlobais = dados.produtos || [] //o q é isso?
-            // Chama a função centralizada para desenhar na tela
-            estatisticasGlobais = dados.estatisticas || []
-            historicoGlobal = dados.historico || []
+    try {
+        const resposta = await fetch(`${CONSTANTS.API_URL}/produtos`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!resposta.ok)
+            throw new Error(`Erro ${resposta.status}: Não foi possível buscar os produtos`)
+        const dados = await resposta.json()
 
-            renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais })
-        } catch (erro) {
-            console.error("Erro na listagem:", erro)
-            listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-danger px-0">Falha ao carregar produtos. O Flask está rodando?</li>`
-        }
+        produtosGlobais = dados.produtos || []
+        estatisticasGlobais = dados.estatisticas || []
+        historicoGlobal = dados.historico || []
+
+        renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais })
+    } catch (err) {
+        toastAlert(err.message, CONSTANTS.MSG_ERROR)
+        listaHTML.innerHTML = CONSTANTS.JS_STRINGS.COMM_ERROR
+    }
+}
+
+function renderizarLista({ produtos, estatisticas, historico }) {
+    // <?> precisa avaliar a necessidade de ter os outros inputs
+    listaHTML.innerHTML = ''
+
+    if (estatisticas.length == 0) {
+        listaHTML.innerHTML = CONSTANTS.JS_STRINGS.PRODUCT_LIST_EMPY
+        loading.style.display = "none"
+        return
+    }
+
+    estatisticas.forEach(item => {
+        listaHTML.innerHTML += CONSTANTS.LISTA_HTML.REV1(item.nome, item.preco_medio)
+    })
+
+    loading.style.display = "none"
+}
+
+const filtrarProdutos = () => {
+    if (inputBusca.value !== null || inputBusca.value !== undefined || inputBusca.value !== "") {
+        // <?> bloco if esta aki porque em algum lugar estou chamando essa função
+        // e estar com o campo em branco quebrou a logica
+        // precisa verificar
+        const termo = campoDeBusca
+
+        const produtosFiltrados = produtosGlobais.filter(filtro =>
+            filtro.nome.toLowerCase().includes(termo)
+        )
+        // <?> precisa avaliar a necessidade de manter o produto
+        // ja que o as estatisticas carregam nome e historico de preços        
+        const estatisticasFiltradas = estatisticasGlobais.filter(filtro =>
+            filtro.nome.toLowerCase().includes(termo)
+        )
+        renderizarLista({ produtos: produtosFiltrados, estatisticas: estatisticasFiltradas, historico: historicoGlobal })
+        return
+    }
+    renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais, historico: historicoGlobal })
 }
 
 // ########################################
-// # EVENTOS LOCAIS
+// # FUNÇÕES DO POP-UP
 // ########################################
-
-inputBusca.addEventListener('input', (e) => {
-    console.log("evento disparado ...")
-    campoDeBusca = e.target.value.toLowerCase().trim()
-    filtrarProdutos()
-})
-
-
-// o que vem primeiro? faz diferença? essa função é usada acima, não tem q ser declarada primeiro?
-// 2. Função centralizada para desenhar os produtos (evita código duplicado)
-let graficoAtual = null;
-
 function montarGrafico(historico) {
-    // 1. Formata a data para o padrão brasileiro curto (ex: 07/09/2026)
     const labels = historico.map(item => {
         const dataObj = new Date(item.data);
         return dataObj.toLocaleDateString('pt-BR');
-        // Se quiser ocultar o ano e deixar só dia/mês, use: 
-        // return dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
     });
 
     const valores = historico.map(item => item.valor);
@@ -88,30 +101,28 @@ function montarGrafico(historico) {
                 pointRadius: 4 // Tamanho da bolinha em cada valor
             }]
         },
-        // 2. Aqui entram as opções para limpar o eixo X
+        // Eixo X
         options: {
             responsive: true,
             scales: {
                 x: {
                     ticks: {
                         autoSkip: true, // Pula legendas automaticamente se faltar espaço
-                        maxTicksLimit: 5 // Mostra no máximo 5 datas no eixo, mas mantém TODOS os pontos na linha
+                        maxTicksLimit: 5
                     }
                 },
                 y: {
-                    beginAtZero: false // Como são preços, é melhor não começar do zero para ver bem as variações
+                    beginAtZero: false
                 }
             }
         }
     });
 }
 
-// 3. Lógica do Modal de Histórico de Preços
 function abrirHistorico(nomeDoProduto) {
     document.getElementById('nomeProdutoModal').innerText = nomeDoProduto
 
     const meuItem = estatisticasGlobais.find(item => item.nome === nomeDoProduto)
-    console.log(JSON.stringify(meuItem))
 
     const dadosHistorico = [
         { data: 'Maior preço', preco: `R$ ${meuItem.maior_preco.toFixed(2)}` },
@@ -122,121 +133,19 @@ function abrirHistorico(nomeDoProduto) {
     const listaHTML = document.getElementById('listaHistorico')
     listaHTML.innerHTML = ''
 
-    dadosHistorico.forEach(item => {
-        listaHTML.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between bg-transparent px-0 border-bottom">
-                <span style="color: var(--text-muted)">${item.data}</span>
-                <span class="fw-bold"> ${item.preco}</span>
-            </li>
-        `
-    })
-
-    console.log("Nome recebido:", nomeDoProduto)
-    console.log("Chaves disponíveis em historicoGlobal:", Object.keys(historicoGlobal))
+    dadosHistorico.forEach(item => { CONSTANTS.PRODUCT_BOX_HTML.REV0(item) })
 
     const historico = historicoGlobal[nomeDoProduto] || []
-    console.log("Histórico encontrado:", historico)
 
     montarGrafico(historico)
     const modal = new mdb.Modal(document.getElementById('modalHistorico'))
     modal.show()
 }
 
-const filtrarProdutos = () => {
-
-    console.log(`valor do campo de busca é ${inputBusca.value}`)
-    if (inputBusca.value !== null || inputBusca.value !== undefined || inputBusca.value !== "") {
-        // inputBusca.addEventListener('input', (e) => {
-        const termo = campoDeBusca
-
-        console.log(`campo de busca modificado para: ${termo}`)
-
-        // Filtra os produtos salvos na memória
-        const produtosFiltrados = produtosGlobais.filter(filtro =>
-            filtro.nome.toLowerCase().includes(termo)
-        )
-        const estatisticasFiltradas = estatisticasGlobais.filter(filtro =>
-            filtro.nome.toLowerCase().includes(termo)
-        )
-        filtro = true
-        renderizarLista({ produtos: produtosFiltrados, estatisticas: estatisticasFiltradas, historico: historicoGlobal })
-        return
-    }
-    filtro = false
-    renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais, historico: historicoGlobal })
-}
-
-// Função centralizada para desenhar os produtos
-function renderizarLista({ produtos, estatisticas, historico }) {
-    console.log("tentado renderizar a lista com os produtos: ")
-
-    if (!listaHTML) return
-
-    console.log("limpado a lista")
-    listaHTML.innerHTML = ''
-
-    // if (produtos !== undefined)
-    if (estatisticas.length == 0) {
-        console.log("produtos n contem dados")
-        listaHTML.innerHTML = `<li class="list-group-item text-center bg-transparent text-muted px-0">Nenhum produto encontrado.</li>`
-        loading.style.display = "none"
-        return
-    } else { console.log("produto cotem dados") }
-
-    estatisticas.forEach(item => {
-        // dados do painel
-        console.log(item.nome, item.preco_medio)
-        listaHTML.innerHTML += CONSTANTS.LISTA_HTML.REV1(item.nome,item.preco_medio)
-        //dados do modal
-
-
-    })
-
-
-    loading.style.display = "none"
-}
-
-// ÁREA DE TESTES
-
-// 🔗 NOVA LÓGICA: Ouvinte do botão de vincular
-// document.addEventListener("DOMContentLoaded", () => {
-// if (btnVincular) {
-//     btnVincular.addEventListener("click", async () => {
-//         // Busca todos os checkboxes que estão marcados
-//         const marcados = document.querySelectorAll('.produto-cb:checked')
-
-//         // Extrai apenas o valor (nome do produto) de cada checkbox marcado
-//         const nomesSelecionados = Array.from(marcados).map(cb => cb.value)
-
-//         if (nomesSelecionados.length < 2) {
-//             alert("Selecione pelo menos 2 produtos para criar um vínculo.")
-//             return
-//         }
-
-//         try {
-//             // Envia a lista de nomes para o Back-end
-//             const resposta = await fetch("http://127.0.0.1:5000/produtos/vincular", {
-//                 method: "POST",
-//                 headers: { "Content-Type": "application/json" },
-//                 body: JSON.stringify({ nomes: nomesSelecionados })
-//             })
-
-//             if (!resposta.ok) {
-//                 throw new Error("Erro ao vincular produtos no servidor.")
-//             }
-
-//             alert("Produtos vinculados com sucesso!")
-
-//             // Desmarca as caixinhas após o sucesso
-//             marcados.forEach(cb => cb.checked = false)
-
-//             // Opcional: Recarrega a lista para atualizar dados
-//             carregarProdutos()
-
-//         } catch (erro) {
-//             console.error("Erro ao vincular:", erro)
-//             alert(erro.message)
-//         }
-//     })
-// }
-// })
+// ########################################
+// # EVENTOS LOCAIS
+// ########################################
+inputBusca.addEventListener('input', (e) => {
+    campoDeBusca = e.target.value.toLowerCase().trim()
+    filtrarProdutos()
+})

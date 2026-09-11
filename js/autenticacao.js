@@ -1,17 +1,7 @@
 // ########################################
-// # ELEMENTOS DO HTML
-// ########################################
-const formulario = document.getElementById("form-login")
-const inputEmail = document.getElementById("email")
-const inputSenha = document.getElementById("senha")
-const botaoLogin = document.getElementById("btn-login")
-
-// Adicioar fução pra mostrar q o logi esta em adameto, e melhor a comuicação de erro caso acoteceça
-
-// ########################################
 // # FUNÇÔES
 // ########################################
-function verificarCampos() {
+function verificarCamposDeLogin() {
   const emailPreenchido = inputEmail.value.trim() !== ""
   const senhaPreenchida = inputSenha.value.trim() !== ""
 
@@ -28,25 +18,21 @@ function lerCampos() {
 }
 
 // ########################################
-// # INICIALIZAÇÃO
+// # EVENTOS LOCAIS
 // ########################################
-botaoLogin.disabled = true
 
-inputEmail.addEventListener("input", verificarCampos)
+inputEmail.addEventListener("input", verificarCamposDeLogin)
 
-inputSenha.addEventListener("input", verificarCampos)
+inputSenha.addEventListener("input", verificarCamposDeLogin)
 
 formulario.addEventListener("submit", async (event) => {
-  event.preventDefault()
+  event.preventDefault() // <?> pra que serve ?
 
-  // 1. Salva o texto original e altera o visual do botão
+  // Salva o texto original, inicia o spinner e impede outro click
   const textoOriginal = botaoLogin.innerHTML
-
-  // 2. Adiciona o texto e o spinner animado nativo do Bootstrap
   botaoLogin.innerHTML = CONSTANTS.STYLES.SPINNER
   botaoLogin.disabled = true
 
-  // 3. Tentativa de envio da requisição POST para o servidor Flask
   try {
     const resposta = await fetch(`${CONSTANTS.API_URL}/login`, {
       method: "POST",
@@ -58,25 +44,39 @@ formulario.addEventListener("submit", async (event) => {
 
     const dadosRetorno = await resposta.json()
 
-    if (resposta.ok) {
-      localStorage.setItem("usuario_logado", dadosRetorno.email) // precisa verificar se funciona sem o live server]
-      navegarPara("painel")
-      toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, CONSTANTS.MSG_SUCCESS) // precisa alterar a resposta para receber o nome do usuário, e não o email
-      inputEmail.value = ""
-      inputSenha.value = ""
-      carregarProdutos()
-      // No sucesso do login
-      // localStorage.setItem("auth_token", dados.token)
-      // localStorage.setItem("usuario_logado", dadosRetorno.email) // ou email/nome, o que já usa
-    } else {
-      toastAlert(dadosRetorno.error, CONSTANTS.MSG_ERROR) // erro de credenciais inválidas ?
-    }
+    if (!resposta.ok)
+      throw new Error(`Erro ${resposta.status}`)
 
-  } catch (erro) {
-    toastAlert(CONSTANTS.JS_STRINGS.COMM_ERROR, CONSTANTS.MSG_ERROR) // erro de comunicação com o servidor
+    localStorage.setItem("usuario_logado", dadosRetorno.email) // <?> precisa verificar se funciona sem o live server]
+
+    carregarProdutos()
+    navegarPara("painel")
+    toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, CONSTANTS.MSG_SUCCESS) // precisa alterar a resposta para receber o nome do usuário, e não o email
+
+    inputEmail.value = ""
+    inputSenha.value = ""
+    botaoLogin.disabled = true
+  } catch (err) {
+    let msg
+    switch (err.message) {
+      case "Erro 404": msg = CONSTANTS.JS_STRINGS.USER_NOT_FOUND
+        break;
+      default:
+        msg = err.message
+    }
+    toastAlert(msg, CONSTANTS.MSG_ERROR)
+    botaoLogin.innerHTML = textoOriginal
+    botaoLogin.disabled = true
+
   }
 
-  // Fim. Restaura o texto original e reabilita o botão
   botaoLogin.innerHTML = textoOriginal
   botaoLogin.disabled = false
 })
+
+// ########################################
+// # EVENTOS LOCAIS
+// ########################################
+btnIrCadastro.addEventListener("click", () => navegarPara("cadastro"))
+
+buttonBack.addEventListener("click", () => navegarPara("login"))
