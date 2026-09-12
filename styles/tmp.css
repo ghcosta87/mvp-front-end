@@ -1,0 +1,476 @@
+/* =========================================
+   1. VARIÁVEIS GLOBAIS E TEMAS
+========================================= */
+
+/* Tema 1: Claro (Padrão) */
+:root {
+    --bg-page: #f4f6f9;
+    --bg-card: #ffffff;
+    --text-main: #333333;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+
+    --btn-primary: #0d6efd;
+    --btn-success: #198754;
+    --btn-danger: #dc3545;
+}
+
+/* Tema 2: Escuro */
+[data-theme="escuro"] {
+    --bg-page: #121212;
+    --bg-card: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-muted: #9e9e9e;
+    --border-color: #333333;
+
+    --btn-primary: #3700b3;
+    --btn-success: #03dac6;
+    --btn-danger: #cf6679;
+}
+
+/* Tema 3: Tech (Azul Metalizado) */
+[data-theme="tech"] {
+    --bg-page: #0e2e68;
+    --bg-card: #14387a;
+    --text-main: #e2e8f0;
+    --text-muted: #709ad4;
+    --border-color: #1e3a8a;
+
+    --btn-primary: #2563eb;
+    --btn-success: #22c55e;
+    --btn-danger: #ef4444;
+}
+
+
+
+/* =========================================
+   2. APLICANDO AS VARIÁVEIS AO PROJETO
+========================================= */
+body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card,
+.resultado-box,
+.list-group-item {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+.text-price {
+    color: var(--btn-success) !important;
+}
+
+/* Cores dinâmicas para os botões usando as variáveis */
+.btn-primary {
+    background-color: var(--btn-primary);
+    border-color: var(--btn-primary);
+}
+
+.btn-success {
+    background-color: var(--btn-success);
+    border-color: var(--btn-success);
+}
+
+.btn-danger {
+    background-color: var(--btn-danger);
+    border-color: var(--btn-danger);
+}
+
+
+/* =========================================
+   3. CÂMERA E INTERFACE
+========================================= */
+.camera-box {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 4/3;
+    background-color: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--border-color);
+}
+
+.camera-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* =========================================
+   4. TELA DE LOADING E SPINNER
+========================================= */
+#tela-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-page);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+.loading-ativo {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border-color);
+    border-top-color: var(--btn-primary);
+    border-radius: 50%;
+    animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   5. MODAIS E COMPONENTES FLUTUANTES
+========================================= */
+.modal-content {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    opacity: 1 !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.modal-content .list-group-item {
+    background-color: transparent !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    opacity: 1 !important;
+}
+
+.card, .resultado-box, .list-group-item, .offcanvas {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+/* =========================================
+   6. TOAST DE NOTIFICAÇÃO
+========================================= */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff4d4d;
+    /* Cor de erro (vermelho) */
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(20px);
+    font-family: sans-serif;
+    max-width: 350px;
+}
+
+.toast-container.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.toast-msg {
+    font-size: 14px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.toast-close:hover {
+    opacity: 0.7;
+}
+
+.toast-container.sucesso {
+    background-color: #198754;
+    /* verde */
+}
+
+.toast-container.erro {
+    background-color: #ff4d4d;
+    /* vermelho */
+}
+
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    transform: translateY(20px);
+    font-family: sans-serif;
+    max-width: 350px;
+}
+/* ===================================================
+   ESTILO MODERNO PARA A LISTA DE PRODUTOS (CARDS)
+=================================================== */
+
+/* 1. Transforma o container da lista para aceitar o espaçamento (gap) */
+#lista-produtos {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important; /* Espaço "respirável" entre os cards */
+    background: transparent !important; /* Remove o fundo branco/cinza padrão */
+    padding: 10px 0 !important;
+}
+
+/* 2. Força cada <li> a se comportar como um Card independente e arredondado */
+#lista-produtos .list-group-item {
+    background-color: #1a1c20 !important; /* Fundo escuro suave */
+    border: 1px solid #2d3035 !important; /* Borda super sutil */
+    border-radius: 12px !important; /* Arredonda TODOS os cantos de CADA item */
+    padding: 16px 20px !important;
+    margin-bottom: 0 !important; /* Previne margens extras do Bootstrap */
+    transition: all 0.2s ease-in-out !important; /* Prepara para a animação */
+}
+
+/* 3. Efeito ao passar o mouse (Hover) - O card levanta e "acende" */
+#lista-produtos .list-group-item:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-3px) !important; /* Levanta o card levemente */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important; /* Sombra projetada */
+}
+
+/* 4. Estiliza o checkbox para ficar mais limpo */
+#lista-produtos .form-check-input {
+    width: 1.3em;
+    height: 1.3em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+/* 5. Animação de cor no título quando o mouse passa no card */
+#lista-produtos .list-group-item:hover .nome-produto-card {
+    color: #00d2a0 !important; /* Fica verde combinando com o preço */
+}
+
+/* Oculta a borda do contêiner "pai" que você usou no HTML para não criar caixas duplas */
+.text-bg-dark.border-secondary {
+    border-color: transparent !important;
+    background-color: transparent !important;
+}
+
+/* ===================================================
+   COMPORTAMENTO RESPONSIVO DO MENU (LARGURA > ALTURA)
+=================================================== */
+
+@media (orientation: landscape) {
+    /* 1. Fixa o menu na esquerda e anula o efeito de gaveta invisível */
+    #sidebarMenu {
+        transform: none !important;
+        visibility: visible !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.3) !important; /* Sombra moderna para separar */
+        z-index: 1040;
+    }
+
+    /* 2. Oculta o botão de hambúrguer, pois o menu já está exposto */
+    #btn-menu {
+        display: none !important;
+    }
+
+    /* 3. Empurra todo o painel para a direita. 
+          Usamos 25% porque é o exato tamanho do width do seu menu no HTML. */
+    #tela-painel {
+        padding-left: 25% !important;
+    }
+
+    /* 4. Esconde a máscara escura (backdrop) do MDBootstrap, caso ele tente abrir */
+    .offcanvas-backdrop {
+        display: none !important;
+    }
+    
+    /* 5. Garante que a tela continue com rolagem caso o JS tente bloquear */
+    body {
+        overflow-y: auto !important;
+        padding-right: 0 !important;
+    }
+}
+/* 1. Transforma o container em um Grid Responsivo */
+#lista-produtos {
+    display: grid !important;
+    /* Essa é a linha de ouro: Cria colunas que têm no mínimo 320px e crescem para preencher o resto */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 16px !important; /* Espaço entre os cards (vertical e horizontal) */
+    background: transparent !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* 2. Mantém os cards arredondados e com efeito hover (mesmas regras de antes) */
+#lista-produtos .list-group-item {
+    background-color: #1a1c20 !important;
+    border: 1px solid #2d3035 !important;
+    border-radius: 12px !important;
+    padding: 16px 20px !important;
+    margin-bottom: 0 !important;
+    transition: all 0.2s ease-in-out !important;
+    /* Garante que o card ocupe 100% do espaço da sua célula no grid */
+    height: 100%; 
+}
+
+#lista-produtos .list-group-item:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+#lista-produtos .form-check-input {
+    width: 1.3em;
+    height: 1.3em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+#lista-produtos .list-group-item:hover .nome-produto-card {
+    color: #00d2a0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Container do Grid */
+#lista-produtos {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 16px !important;
+    background: transparent !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* O Card de cada produto */
+#lista-produtos .list-group-item.card-produto-grid {
+    background-color: #1a1c20 !important;
+    border: 1px solid #2d3035 !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    cursor: pointer !important; /* Transforma o mouse em mãozinha em todo o card */
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Efeito Hover do Card */
+#lista-produtos .list-group-item.card-produto-grid:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+#lista-produtos .list-group-item.card-produto-grid:hover .nome-produto-card {
+    color: #00d2a0 !important;
+}
+
+/* Checkbox */
+#lista-produtos .form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+/* Área do Nome do Produto (Ocupa o espaço que sobra e quebra linha perfeitamente) */
+.nome-produto-container {
+    flex: 1 !important;
+    min-width: 0 !important; /* Impede o flexbox de estourar o card */
+}
+
+.nome-produto-card {
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important; /* Quebra palavras longas se necessário */
+    transition: color 0.2s;
+}
+
+/* Área do Preço (Força pelo menos 30% de espaço e alinha à direita) */
+.preco-produto-container {
+    flex: 0 0 30% !important; /* Trava o espaço em 30% do card */
+    text-align: right !important;
+}
+
+.preco-texto {
+    font-size: 1.05rem !important;
+    white-space: nowrap !important; /* Garante que o cifrão e o número nunca se separem */
+}
+/*sidebar*/
+#sidebarMenu {
+    width: clamp(220px, 25%, 400px) !important;
+}
+/*painel*/
+.barra-busca-fixa {
+    position: sticky;
+    top: 0;
+    z-index: 100; /* garante que fique por cima da lista de produtos ao rolar */
+    background-color: var(--bg-page); /* evita que o conteúdo "passe por trás" transparente */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

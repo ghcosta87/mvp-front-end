@@ -26,6 +26,18 @@ function aplicarTema(tema) {
     document.body.setAttribute("data-theme", tema)
     localStorage.setItem("tema_escolhido", tema)
     esconderBarraLateral()
+
+    if (tema === "claro")
+        document.body.removeAttribute("data-theme")
+    else document.body.setAttribute("data-theme", tema)
+
+    localStorage.setItem("tema_escolhido", tema)
+    toggleTema.checked = (tema === "escuro")
+    if (mdb.Offcanvas.getInstance(sidebarEl)) menuLateral.hide()
+    toggleTema.addEventListener("change", () => {
+        const novoTema = toggleTema.checked ? "escuro" : "claro"
+        aplicarTema(novoTema)
+    })
 }
 
 function navegarPara(tela) {
@@ -35,10 +47,12 @@ function navegarPara(tela) {
     switch (tela) {
         case "login":
             telaCadastro.classList.add("d-none")
+            telaPainel.classList.add("d-none")
             telaLogin.classList.remove("d-none")
             sidebarEl.classList.add("d-none")
             break
         case "painel":
+            telaPainel.classList.remove("d-none")
             loading.style.display = "inline-block"
             telaLogin.classList.add("d-none")
             telaPainel.style.display = "block"
@@ -46,6 +60,7 @@ function navegarPara(tela) {
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
             break
         case "cadastro":
+            telaCadastro.classList.add("d-none")
             telaLogin.classList.add("d-none")
             telaCadastro.classList.remove("d-none")
             telaCadastro.style.display = "flex"
@@ -53,6 +68,7 @@ function navegarPara(tela) {
             break
     }
 }
+
 const userState = () => {
     // const token = localStorage.getItem("auth_token")
     // if (token) {
@@ -62,6 +78,21 @@ const userState = () => {
     //     navegarPara("login")
     // }
     return localStorage.getItem("usuario_logado")
+}
+
+function setUploadLoading(ativo) {
+    if (ativo) {
+        btnUpload.dataset.iconeOriginal = btnUpload.innerHTML // guarda o ícone original
+        btnUpload.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+        btnUpload.classList.add("disabled") // impede novo clique visualmente
+        btnUpload.style.pointerEvents = "none" // impede clique de fato (label não tem "disabled" nativo)
+        inputComprovante.disabled = true
+    } else {
+        btnUpload.innerHTML = btnUpload.dataset.iconeOriginal
+        btnUpload.classList.remove("disabled")
+        btnUpload.style.pointerEvents = "auto"
+        inputComprovante.disabled = false
+    }
 }
 
 // ########################################
@@ -78,5 +109,4 @@ document.addEventListener("DOMContentLoaded", () => {
         navegarPara('painel')
         carregarProdutos()
     } else navegarPara('login')
-
 })

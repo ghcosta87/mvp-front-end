@@ -1,8 +1,202 @@
+/* =========================================
+   SWITCH DE TEMA (DIA/NOITE)
+========================================= */
+.switch-tema {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch-tema input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #6c757d;
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+.switch-slider::before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.icone-switch {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    transition: 0.3s;
+    z-index: 0;
+}
+
+.icone-sol {
+    left: 6px;
+    color: #ffc107;
+    opacity: 0;
+    z-index: 11;
+}
+
+.icone-lua {
+    right: 6px;
+    color: #4e5052;
+    opacity: 0;
+    z-index: 1;
+}
+
+.switch-tema input:checked + .switch-slider {
+    background-color: var(--btn-primary);
+}
+
+.switch-tema input:checked + .switch-slider::before {
+    transform: translateX(24px);
+}
+
+.switch-tema input:checked + .switch-slider .icone-sol {
+    opacity: 0;
+}
+
+.switch-tema input:checked + .switch-slider .icone-lua {
+    opacity: 1;
+}
+
+.switch-tema input:checked + .switch-slider {
+    background-color: var(--btn-primary);
+}
+
+.switch-tema input:checked + .switch-slider::before {
+    transform: translateX(24px);
+}
+
+/* Destaca o ícone do tema ativo */
+#icone-sol, #icone-lua {
+    color: var(--text-muted);
+    transition: color 0.3s;
+}
+
+/* =========================================
+   BARRA DE BUSCA FIXA
+========================================= */
 .barra-busca-fixa {
     position: sticky;
     top: 0;
-    z-index: 100; /* garante que fique por cima da lista de produtos ao rolar */
-    background-color: var(--bg-page); /* evita que o conteúdo "passe por trás" transparente */
+    z-index: 100;
+    background-color: var(--bg-page);
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+/* =========================================
+   LISTA DE PRODUTOS (GRID DE CARDS)
+========================================= */
+#lista-produtos {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 16px !important;
+    background: transparent !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* O <li> do JS precisa ter a classe "card-produto-grid" além de
+   "list-group-item" */
+#lista-produtos .list-group-item.card-produto-grid {
+    background-color: var(--bg-card-grid) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+#lista-produtos .list-group-item.card-produto-grid:hover {
+    background-color: #22252a !important;
+    border-color: #3d4148 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+    filter: brightness(1.15)
+}
+
+#lista-produtos .list-group-item.card-produto-grid:hover .nome-produto-card {
+    color: #00d2a0 !important;
+}
+
+#lista-produtos .form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    cursor: pointer;
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+}
+
+.nome-produto-container {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.nome-produto-card {
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important;
+    transition: color 0.2s;
+}
+
+.preco-produto-container {
+    flex: 0 0 30% !important;
+    text-align: right !important;
+}
+
+.preco-texto {
+    font-size: 1.05rem !important;
+    white-space: nowrap !important;
+}
+
+.text-bg-dark.border-secondary {
+    border-color: transparent !important;
+    background-color: transparent !important;
+}
+
+/* =========================================
+   MODAIS (regra genérica p/ todos do projeto)
+========================================= */
+.modal-content {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    opacity: 1 !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.modal-content .list-group-item {
+    background-color: transparent !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    opacity: 1 !important;
 }

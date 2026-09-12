@@ -1,11 +1,11 @@
 // ########################################
 // # EVENTOS
 // ########################################
-btnClaro.addEventListener("click", () => aplicarTema("claro"))
+// btnClaro.addEventListener("click", () => aplicarTema("claro"))
 
-btnEscuro.addEventListener("click", () => aplicarTema("escuro"))
+// btnEscuro.addEventListener("click", () => aplicarTema("escuro"))
 
-btnTech.addEventListener("click", () => aplicarTema("tech"))
+// btnTech.addEventListener("click", () => aplicarTema("tech"))
 
 botaoSair.addEventListener("click", () => {
     localStorage.removeItem("usuario_logado")

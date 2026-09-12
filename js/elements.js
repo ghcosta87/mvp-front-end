@@ -25,6 +25,7 @@ const listaHTML = document.getElementById('lista-produtos')
 const btnVincular = document.getElementById("btn-vincular")
 const inputBusca = document.getElementById('input-busca')
 const loading = document.getElementById("loading-produtos")
+const toggleTema = document.getElementById("toggle-tema")
 
 // Sidebar
 const sidebarEl = document.getElementById("sidebarMenu")
@@ -33,6 +34,8 @@ const btnEscuro = document.getElementById("btn-tema-escuro")
 const btnTech = document.getElementById("btn-tema-tech")
 const btnEncerrarConta = document.getElementById("btn-encerrar-conta")
 const botaoSair = document.getElementById("btn-sair")
+const inputComprovante = document.getElementById("input-comprovante")
+const btnUpload = document.getElementById("btn-upload")
 
 // Popup de encerramento de conta
 const btnConfirmarEncerramento = document.getElementById("btn-confirmar-encerramento")

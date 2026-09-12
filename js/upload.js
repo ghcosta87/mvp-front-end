@@ -1,20 +1,8 @@
 // ########################################
-// # ELEMENTOS DO HTML
+// # FUNÇÕES LOCAIS
 // ########################################
-const inputComprovante = document.getElementById("input-comprovante")
-
-inputComprovante.addEventListener("change", (e) => {
-    const arquivo = e.target.files[0]
-
-    if (!arquivo) return
-
-    console.log("Arquivo selecionado:", arquivo)
-    // arquivo.name, arquivo.type, arquivo.size já disponíveis aqui
-
-    enviarComprovante(arquivo)
-})
-
 async function postPicture(dataIn, avisoDemora) {
+    // precisa reescrever esse modo
     fetch(`${CONSTANTS.API_URL}/upload`, {
         method: 'POST',
         body: dataIn
@@ -88,3 +76,13 @@ async function enviarComprovante(arquivo) {
 // ########################################
 // # EVENTOS LOCAIS
 // ########################################
+inputComprovante.addEventListener("change", (e) => {
+    const arquivo = e.target.files[0]
+
+    if (!arquivo) return
+
+    console.log("Arquivo selecionado:", arquivo)
+    // arquivo.name, arquivo.type, arquivo.size já disponíveis aqui
+
+    enviarComprovante(arquivo)
+})

@@ -13,22 +13,125 @@
 
     <!-- NOSSO CSS PERSONALIZADO (Garante os pontos da Obs 2) -->
     <link rel="stylesheet" href="styles/global.css">
-    <link rel="stylesheet" href="styles/sidebar.css">
     <link rel="stylesheet" href="styles/painel.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
 </head>
 
 <body>
     <!-- ==========================================
-    FORA DA TELA: TOAST DE NOTIFICAÇÃO
-=========================================== -->
+    1. TOPO DA TELA: 
+    =========================================== -->
+    <!-- 1.1 TOAST DE NOTIFICAÇÃO -->
     <div id="toast-container" class="toast-container">
         <div id="toast-mensagem" class="toast-msg">Mensagem de erro aqui</div>
     </div>
 
+    <!-- 1.2 Alternador de tema -->
+    <div>
+        <div class="d-flex align-items-center justify-content-between mt-2 px-1">
+            <span class="d-flex align-items-center gap-2">
+            </span>
 
+            <label class="switch-tema">
+                <input type="checkbox" id="toggle-tema">
+                <span class="switch-slider">
+                    <i class="fas fa-sun icone-switch icone-sol"></i>
+                    <i class="fas fa-moon icone-switch icone-lua"></i>
+                </span>
+            </label>
+        </div>
+    </div>
 
     <!-- ==========================================
-         TELA 1: LOGIN (Visível por padrão)
+    2. TELAS TIPO MODAL
+    =========================================== -->
+    <!-- 2.1 CAMERA -->
+    <div class="modal fade" id="modalCamera" tabindex="-1" aria-labelledby="modalCameraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="modalCameraLabel">Escanear Produto</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-3">
+                    <video id="video-camera" autoplay playsinline class="w-100 rounded mb-2 shadow-sm"
+                        style="max-height: 300px; object-fit: cover;"></video>
+                    <canvas id="canvas-camera" class="d-none"></canvas>
+
+                    <!-- x.x RESULTADO -->
+                    <div id="resultado" class="text-muted small mt-2 fw-semibold">
+                        Pronto para escanear produto.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center gap-2 pt-0 pb-3">
+                    <button type="button" id="btn-voltar-camera" class="btn btn-secondary px-4"
+                        data-mdb-dismiss="modal">Voltar</button>
+                    <button type="button" id="btn-capturar-foto" class="btn btn-success px-4">Capturar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2.2 ENCERRAR CONTA -->
+    <div class="modal fade" id="modalEncerrarConta" tabindex="-1" aria-labelledby="modalEncerrarContaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-danger" id="modalEncerrarContaLabel">Encerrar Conta</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">Tem certeza de que deseja encerrar sua conta? Esta ação é
+                        irreversível e apagará todos os seus dados.</p>
+                    <div class="form-outline mb-3">
+                        <input type="password" id="senha-confirmacao" class="form-control" />
+                        <label class="form-label" for="senha-confirmacao">Digite sua senha para
+                            confirmar</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Não</button>
+                    <button type="button" id="btn-confirmar-encerramento" class="btn btn-danger">Sim,
+                        Encerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2.3 HISTÓRICO DE PREÇOS -->
+    <div class="modal fade" id="modalHistorico" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg"
+                style="background-color: var(--bg-card) !important; color: var(--text-main) !important; opacity: 1 !important; border: 1px solid var(--border-color);">
+
+                <!-- Cabeçalho -->
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="tituloModal">Histórico de Preços</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Corpo -->
+                <div class="modal-body">
+                    <h6 id="nomeProdutoModal" class="mb-4" style="color: var( --text-main);"></h6>
+                    <ul class="list-group list-group-flush" id="listaHistorico">
+                    </ul>
+                </div>
+                <!-- Gráfico-->
+                <div class="mt-4">
+                    <canvas id="graficoHistorico"></canvas>
+                </div>
+                <!-- Rodapé -->
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    3. TELA DE LOGIN
     =========================================== -->
     <section id="tela-login" class="vh-100 d-flex justify-content-center align-items-center">
         <div class="container">
@@ -58,225 +161,109 @@
     </section>
 
     <!-- ==========================================
-         TELA 2: PAINEL PRINCIPAL (Invisível por padrão)
+    4. TELA DO PAINEL PRINCIPAL
     =========================================== -->
-
     <section id="tela-painel" style="display: none;">
         <div class="container py-4">
-            <!-- ================= 2. BARRA SUPERIOR (PRIMEIRA LINHA) ================= -->
+            <!-- 4.1 BARRA SUPERIOR -->
             <div class="container-fluid px-0 mb-3 mt-3 barra-busca-fixa">
                 <div class="d-flex align-items-center gap-2 w-100">
-                    <!-- Botão Abrir Menu Lateral -->
+                    <!-- 4.1.a BOTÃO DO MENU LATERAL -->
                     <button id="btn-menu" class="btn btn-secondary px-3 shadow-sm" type="button" title="Menu">
                         <i class="fas fa-bars"></i>
                     </button>
-
-                    <!-- Campo de Busca -->
+                    <!-- 4.1.b CAMPO DE BUSCAR -->
                     <div class="form-outline flex-grow-1 mb-0" data-mdb-input-init>
                         <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
                     </div>
                 </div>
             </div>
 
-            <!-- ================= 3. MODAL DA CÂMERA (COM O RESULTADO DENTRO) ================= -->
-            <div class="modal fade" id="modalCamera" tabindex="-1" aria-labelledby="modalCameraLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header border-0 pb-0">
-                            <h5 class="modal-title fw-bold" id="modalCameraLabel">Escanear Produto</h5>
-                            <button type="button" class="btn-close" data-mdb-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center p-3">
-                            <video id="video-camera" autoplay playsinline class="w-100 rounded mb-2 shadow-sm"
-                                style="max-height: 300px; object-fit: cover;"></video>
-                            <canvas id="canvas-camera" class="d-none"></canvas>
-
-                            <!-- O DIV DE RESULTADO AGORA FICA AQUI DENTRO -->
-                            <div id="resultado" class="text-muted small mt-2 fw-semibold">
-                                Pronto para escanear produto.
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 d-flex justify-content-center gap-2 pt-0 pb-3">
-                            <button type="button" id="btn-voltar-camera" class="btn btn-secondary px-4"
-                                data-mdb-dismiss="modal">Voltar</button>
-                            <button type="button" id="btn-capturar-foto" class="btn btn-success px-4">Capturar</button>
-                        </div>
+            <hr class="my-4">
+            <!-- 4.2 LISTA DE PRODUTOS -->
+            <ul class="list-group rounded-4 overflow-hidden shadow-sm">
+                <li
+                    class="list-group-item d-flex justify-content-between align-items-center px-3 py-2 text-bg-dark border-secondary">
+                    <div class="w-100">
+                        <h5 class="mb-3 text-center fw-bold">
+                            Produtos Capturados
+                            <span id="loading-produtos"
+                                style="display: none; margin-left: 10px; vertical-align: middle;">
+                                <!-- Spinner nativo do Bootstrap -->
+                                <span class="spinner-border spinner-border-sm text-primary" role="status"
+                                    aria-hidden="true"></span>
+                            </span>
+                        </h5>
+                        <ul class="list-group list-group-flush" id="lista-produtos">
+                        </ul>
                     </div>
-                </div>
-            </div>
-
-            <!-- Modal de Confirmação para Encerrar Conta -->
-            <div class="modal fade" id="modalEncerrarConta" tabindex="-1" aria-labelledby="modalEncerrarContaLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header border-0">
-                            <h5 class="modal-title text-danger" id="modalEncerrarContaLabel">Encerrar Conta</h5>
-                            <button type="button" class="btn-close" data-mdb-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-muted">Tem certeza de que deseja encerrar sua conta? Esta ação é
-                                irreversível e apagará todos os seus dados.</p>
-                            <div class="form-outline mb-3">
-                                <input type="password" id="senha-confirmacao" class="form-control" />
-                                <label class="form-label" for="senha-confirmacao">Digite sua senha para
-                                    confirmar</label>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0">
-                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Não</button>
-                            <button type="button" id="btn-confirmar-encerramento" class="btn btn-danger">Sim,
-                                Encerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <hr class="my-4">
-        <!-- Lista de Produtos -->
-        <!-- O contêiner principal ganha bordas arredondadas e corta o que vazar -->
-        <ul class="list-group rounded-4 overflow-hidden shadow-sm">
-
-            <!-- Cada item ganha px-3 para desgrudar o conteúdo das laterais -->
-            <li
-                class="list-group-item d-flex justify-content-between align-items-center px-3 py-2 text-bg-dark border-secondary">
-
-                <div class="w-100">
-                    <h5 class="mb-3 text-center fw-bold">
-                        Produtos Capturados
-                        <span id="loading-produtos" style="display: none; margin-left: 10px; vertical-align: middle;">
-                            <!-- Spinner nativo do Bootstrap -->
-                            <span class="spinner-border spinner-border-sm text-primary" role="status"
-                                aria-hidden="true"></span>
-                        </span>
-                    </h5>
-
-                    <ul class="list-group list-group-flush" id="lista-produtos">
-                        <!-- Os itens virão do Javascript -->
-                    </ul>
-                    <!-- <div class="form-outline mb-3" data-mdb-input-init>
-                    <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
-                </div>
-
-                <ul class="list-group list-group-flush" id="lista-produtos">
-                </ul> -->
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
         </div>
     </section>
+
     <!-- ==========================================
- 1. MENU LATERAL (OFFCANVAS) 
-=========================================== -->
+    5. MENU LATERAL (OFFCANVAS) 
+    =========================================== -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title fw-bold">Preço HUB</h5>
             <button type="button" class="btn-close" data-mdb-dismiss="offcanvas" aria-label="Fechar"></button>
         </div>
-
         <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
-
             <div class="d-flex flex-column gap-3">
-
                 <!-- Grupo: Ações de Produto -->
                 <div>
-                    <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Produtos</small>
+                    <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">
+                        Produtos</small>
                     <div class="d-flex flex-column gap-2 mt-2">
-                        <button id="btn-adicionar-manual" class="btn btn-outline-success text-start w-100"
-                            title="Adicionar Manualmente">
-                            <i class="fas fa-plus me-2"></i> Novo Produto
-                        </button>
                         <button type="button" id="btn-abrir-camera" class="btn btn-outline-primary text-start w-100"
                             title="Abrir Câmera">
                             <i class="fas fa-camera me-2"></i> Escanear
                         </button>
+
                         <label for="input-comprovante" id="btn-upload"
                             class="btn btn-outline-primary text-start w-100 mb-0" style="cursor: pointer;"
                             title="Anexar Arquivo">
                             <i class="fas fa-upload me-2"></i> Anexar Arquivo
                         </label>
                         <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
-                        <button id="btn-vincular" class="btn btn-outline-warning text-start w-100">
-                            <i class="fas fa-link me-2"></i> Vincular
-                        </button>
                     </div>
+
+                    <div class="mb-4"></div>
                 </div>
-
-                <hr class="my-2">
-
-                <!-- Grupo: Temas -->
-                <div>
-                    <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Aparência</small>
-                    <div class="d-flex flex-column gap-2 mt-2">
-                        <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
-                            <i class="fas fa-sun me-2"></i> Claro
-                        </button>
-                        <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
-                            <i class="fas fa-moon me-2"></i> Escuro
-                        </button>
-                        <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
-                            <i class="fas fa-microchip me-2"></i> Tech
-                        </button>
-                    </div>
-                </div>
-
             </div>
-
-            <!-- Grupo: Gerenciamento de Conta -->
-            <div class="d-flex flex-column gap-2 mt-auto">
-                <button id="btn-encerrar-conta" class="btn btn-outline-danger text-start w-100">
-                    <i class="fas fa-user-times me-2"></i> Encerrar Conta
-                </button>
-                <button id="btn-sair" class="btn btn-danger text-start w-100">
-                    <i class="fas fa-sign-out-alt me-2"></i> Sair
-                </button>
-            </div>
-
         </div>
-    </div>
+        <!-- Grupo: Gerenciamento de Conta -->
+        <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
+            <div class="d-flex flex-column gap-3">
+                <hr class="my-2">
+                <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">
+                    Em desenvolvimento</small>
+                <div class="d-flex flex-column gap-2 mt-2">
+                    <button id="btn-adicionar-manual" class="btn btn-outline-success text-start w-100"
+                        title="Adicionar Manualmente">
+                        <i class="fas fa-plus me-2"></i> Novo Produto
+                    </button>
 
-    <!-- MODAL DE HISTÓRICO DE PREÇOS -->
-    <div class="modal fade" id="modalHistorico" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-
-            <!-- ADICIONE ESTE ESTILO DIRETO NA DIV OU NO CSS -->
-            <div class="modal-content shadow-lg"
-                style="background-color: var(--bg-card) !important; color: var(--text-main) !important; opacity: 1 !important; border: 1px solid var(--border-color);">
-
-                <!-- Cabeçalho -->
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title fw-bold" id="tituloModal">Histórico de Preços</h5>
-                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    <button id="btn-vincular" class="btn btn-outline-warning text-start w-100">
+                        <i class="fas fa-link me-2"></i> Vincular
+                    </button>
+                    <hr class="my-2">
                 </div>
-
-                <!-- Corpo -->
-                <div class="modal-body">
-                    <h6 id="nomeProdutoModal" class="mb-4" style="color: var(--btn-primary);">Nome do Produto</h6>
-                    <ul class="list-group list-group-flush" id="listaHistorico">
-                        <!-- Dados inseridos via JS -->
-                    </ul>
-                </div>
-                <!-- Gráfico-->>
-                <div class="mt-4">
-                    <canvas id="graficoHistorico"></canvas>
-                </div>
-
-                <!-- Rodapé -->
-                <div class="modal-footer border-top-0">
-                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
-                </div>
-
             </div>
+            <button id="btn-encerrar-conta" class="btn btn-outline-danger text-start w-100">
+                <i class="fas fa-user-times me-2"></i> Encerrar Conta
+            </button>
+            <button id="btn-sair" class="btn btn-danger text-start w-100">
+                <i class="fas fa-sign-out-alt me-2"></i> Sair
+            </button>
         </div>
     </div>
 
     <!-- ==========================================
-    NOVO: TELA 3: CADASTRO DE USUÁRIO (Invisível por padrão)
-=========================================== -->
+    6. TELA DE CADASTRO DE USUÁRIO
+    =========================================== -->
     <section id="tela-cadastro" class="vh-100 d-flex justify-content-center align-items-center d-none">
         <div class="container">
             <div class="row justify-content-center">
@@ -330,18 +317,21 @@
         </div>
     </section>
 
-    <!-- 1º: MDBootstrap (Sempre primeiro, pois os seus scripts podem precisar dele) -->
+    <!-- ==========================================
+    7. SCRIPTS
+    =========================================== -->
+    <!-- 7.1 MDBootstraP -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"
         defer></script>
 
-    <!-- 2º: As constantes carregam primeiro na memória -->
+    <!-- 7.2 ELEMENTOS HTML E CONSTANTES -->
     <script src="js/elements.js" defer></script>
     <script src="js/constantes.js" defer></script>
 
-    <!-- 3º: O arquivo principal que orquestra tudo -->
+    <!-- 7.3 SCRIPT PRINCIPAL -->
     <script src="js/app.js" defer></script>
 
-    <!-- 4º: As lógicas específicas -->
+    <!-- 7.4 SCRIPTS FUNCTIONAIS POR PÁGINA -->
     <script src="js/autenticacao.js" defer></script>
     <script src="js/camera.js" defer></script>
     <script src="js/upload.js" defer></script>
@@ -350,7 +340,7 @@
     <script src="js/sidebar.js" defer></script>
     <script src="js/painel.js" defer></script>
 
-    <!-- 5º: Outros scripts -->
+    <!-- 7.5 SCRIPTS AUXILIARES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" defer></script>
 </body>
 

@@ -30,7 +30,7 @@ async function carregarProdutos() {
         renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais })
     } catch (err) {
         toastAlert(err.message, CONSTANTS.MSG_ERROR)
-        listaHTML.innerHTML = CONSTANTS.JS_STRINGS.COMM_ERROR
+        listaHTML.innerHTML = CONSTANTS.JS_STRINGS.HTML_COMM_ERROR
     }
 }
 
@@ -39,7 +39,7 @@ function renderizarLista({ produtos, estatisticas, historico }) {
     listaHTML.innerHTML = ''
 
     if (estatisticas.length == 0) {
-        listaHTML.innerHTML = CONSTANTS.JS_STRINGS.PRODUCT_LIST_EMPY
+        listaHTML.innerHTML = CONSTANTS.JS_STRINGS.HTML_PRODUCT_LIST_EMPY
         loading.style.display = "none"
         return
     }
@@ -130,10 +130,15 @@ function abrirHistorico(nomeDoProduto) {
         { data: 'Total de compras', preco: meuItem.total_compras }
     ]
 
-    const listaHTML = document.getElementById('listaHistorico')
-    listaHTML.innerHTML = ''
+    const historicoHTML = document.getElementById('listaHistorico')
+    historicoHTML.innerHTML = ''
 
-    dadosHistorico.forEach(item => { CONSTANTS.PRODUCT_BOX_HTML.REV0(item) })
+
+    dadosHistorico.forEach(item => {
+        historicoHTML.innerHTML += CONSTANTS.PRODUCT_BOX_HTML.REV0(item)
+        console.log(CONSTANTS.PRODUCT_BOX_HTML.REV0(item))
+        console.log(`${item.data} : ${item.preco}`)
+    })
 
     const historico = historicoGlobal[nomeDoProduto] || []
 

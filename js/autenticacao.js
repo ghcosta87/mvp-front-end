@@ -57,12 +57,12 @@ formulario.addEventListener("submit", async (event) => {
     inputSenha.value = ""
     botaoLogin.disabled = true
   } catch (err) {
-    let msg
+    let msg = err.message
     switch (err.message) {
       case "Erro 404": msg = CONSTANTS.JS_STRINGS.USER_NOT_FOUND
-        break;
-      default:
-        msg = err.message
+        break
+      case "Erro 400": msg = CONSTANTS.JS_STRINGS.USER_NOT_FOUND
+        break
     }
     toastAlert(msg, CONSTANTS.MSG_ERROR)
     botaoLogin.innerHTML = textoOriginal

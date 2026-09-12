@@ -52,20 +52,7 @@
 // const btnUpload = document.getElementById("btn-upload")
 // // const inputComprovante = document.getElementById("input-comprovante")
 
-// function setUploadLoading(ativo) {
-//     if (ativo) {
-//         btnUpload.dataset.iconeOriginal = btnUpload.innerHTML // guarda o ícone original
-//         btnUpload.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-//         btnUpload.classList.add("disabled") // impede novo clique visualmente
-//         btnUpload.style.pointerEvents = "none" // impede clique de fato (label não tem "disabled" nativo)
-//         inputComprovante.disabled = true
-//     } else {
-//         btnUpload.innerHTML = btnUpload.dataset.iconeOriginal
-//         btnUpload.classList.remove("disabled")
-//         btnUpload.style.pointerEvents = "auto"
-//         inputComprovante.disabled = false
-//     }
-// }
+
 
 // function enviarComprovanteComProgresso(arquivo) {
 //     return new Promise((resolve, reject) => {
@@ -114,3 +101,21 @@
 //         navegarPara("login")
 //     }
 // }
+
+
+
+            // <!-- Grupo: Temas -->
+            // <div>
+            //     <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Aparência</small>
+            //     <div class="d-flex flex-column gap-2 mt-2">
+            //         <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
+            //             <i class="fas fa-sun me-2"></i> Claro
+            //         </button>
+            //         <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
+            //             <i class="fas fa-moon me-2"></i> Escuro
+            //         </button>
+            //         <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
+            //             <i class="fas fa-microchip me-2"></i> Tech
+            //         </button>
+            //     </div>
+            // </div>
