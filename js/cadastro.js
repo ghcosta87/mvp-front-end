@@ -66,25 +66,27 @@ btnConfirmarEncerramento.addEventListener("click", async () => {
     formData.append("email", localStorage.getItem("usuario_logado"))
     formData.append("senha_digitada", senhaDigitada)
 
-    // const usuarioLogado = || localStorage.getItem("cpf_logado")
-    console.log(`Tentando encerrar conta do usuário: ${localStorage.getItem("usuario_logado")} e senha digitada: ${senhaDigitada}`)
-
     try {
-        const resposta = await fetch(`${CONSTANTS.API_URL}/deletar_usuario`, {
-            method: "POST",
-            body: formData
-        })
+        const dadosRetorno = await deletarUsuario(formData)
 
-        if (!resposta.ok) {
-            const erroData = await resposta.json()
-            throw new Error(erroData.error) //erro 422 acontece
+        if (dadosRetorno) {
+            toastAlert("Conta encerrada com sucesso.", CONSTANTS.MSG_SUCCESS)
+            modalEncerrar.hide()
+
+            localStorage.clear()
+            navegarPara("login")
         }
 
-        toastAlert("Conta encerrada com sucesso.", CONSTANTS.MSG_SUCCESS)
-        modalEncerrar.hide()
+        // const resposta = await fetch(`${CONSTANTS.API_URL}/deletar_usuario`, {
+        //     method: "POST",
+        //     body: formData
+        // })
 
-        localStorage.clear()
-        navegarPara("login")
+        // if (!resposta.ok) {
+        //     const erroData = await resposta.json()
+        //     throw new Error(erroData.error) //erro 422 acontece
+        // }
+
 
     } catch (erro) {
         toastAlert(`Falha ao encerrar conta: ${erro.message}`, CONSTANTS.MSG_ERROR)

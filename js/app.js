@@ -4,10 +4,13 @@
 function toastAlert(mensagem, errorMsg) {
     textoMsg.textContent = mensagem
 
+    toast.classList.remove("erro", "sucesso")
     const tipoClasse = errorMsg ? "erro" : "sucesso"
     toast.classList.add(tipoClasse)
 
     toast.classList.add("show")
+
+    console.debug(`mensagem: ${mensagem}\ntipo de msg:${tipoClasse}`)
 
     clearTimeout(toast._timeoutId)
     toast._timeoutId = setTimeout(() => {

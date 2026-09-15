@@ -1,15 +1,10 @@
 // ########################################
 // # ELEMENTOS DO HTML
 // ########################################
-// const video = document.getElementById('video');
 const videoElement = document.getElementById("video-camera");
 
-// const canvas = document.getElementById('canvas');
 const canvas = document.getElementById("canvas-camera");
-// const inputComprovante = document.getElementById("input-comprovante");
 
-// const btnCapturar = document.getElementById('btnCapturar');
-// const btnToggleCamera = document.getElementById('btnToggleCamera');
 const btnAbrirCamera = document.getElementById("btn-abrir-camera");
 const btnVoltarCamera = document.getElementById("btn-voltar-camera");
 const btnCapturarFoto = document.getElementById("btn-capturar-foto");
@@ -29,9 +24,6 @@ const pararCamera = () => {
     if (modalCamera) modalCamera.hide()
     resultadoDiv.innerText = "Pronto para escanear produto."
 };
-// document.addEventListener("DOMContentLoaded", () => {})
-//    btnVincular.addEventListener("click", async () => {})
-//  formCadastro.addEventListener("submit", async (event) => {
 
 // Fechar o modal de exibição da camera e para a conexão com a camera
 if (btnVoltarCamera)
@@ -78,10 +70,7 @@ async function postImage(dataIn) {
         .catch(err => {
             resultadoDiv.innerText = "Erro ao processar: " + err;
             toastAlert("Erro ao processar: " + err, CONSTANTS.MSG_ERROR)
-        });
-
-
-        
+        });        
 }
 
 if (videoElement && canvas && btnCapturarFoto && modalCamera && resultadoDiv)

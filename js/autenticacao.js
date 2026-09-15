@@ -34,37 +34,23 @@ formulario.addEventListener("submit", async (event) => {
   botaoLogin.disabled = true
 
   try {
-    const resposta = await fetch(`${CONSTANTS.API_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(lerCampos())
-    })
 
-    const dadosRetorno = await resposta.json()
+    const dadosRetorno = await autenticarUsuario()
 
-    if (!resposta.ok)
-      throw new Error(`Erro ${resposta.status}`)
+    if (dadosRetorno) {
+      localStorage.setItem("usuario_logado", dadosRetorno.email)
 
-    localStorage.setItem("usuario_logado", dadosRetorno.email) // <?> precisa verificar se funciona sem o live server]
+      carregarProdutos()
+      navegarPara("painel")
+      toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, CONSTANTS.MSG_SUCCESS)
 
-    carregarProdutos()
-    navegarPara("painel")
-    toastAlert(`Bem-vindo(a), ${dadosRetorno.email}!`, CONSTANTS.MSG_SUCCESS) // precisa alterar a resposta para receber o nome do usuário, e não o email
-
-    inputEmail.value = ""
-    inputSenha.value = ""
-    botaoLogin.disabled = true
-  } catch (err) {
-    let msg = err.message
-    switch (err.message) {
-      case "Erro 404": msg = CONSTANTS.JS_STRINGS.USER_NOT_FOUND
-        break
-      case "Erro 400": msg = CONSTANTS.JS_STRINGS.USER_NOT_FOUND
-        break
+      inputEmail.value = ""
+      inputSenha.value = ""
+      botaoLogin.disabled = true
     }
-    toastAlert(msg, CONSTANTS.MSG_ERROR)
+  } catch (err) {
+    console.log(`${err.message} erro ao submeter o login`)
+    toastAlert(err, CONSTANTS.MSG_ERROR)
     botaoLogin.innerHTML = textoOriginal
     botaoLogin.disabled = true
 
@@ -74,9 +60,6 @@ formulario.addEventListener("submit", async (event) => {
   botaoLogin.disabled = false
 })
 
-// ########################################
-// # EVENTOS LOCAIS
-// ########################################
 btnIrCadastro.addEventListener("click", () => navegarPara("cadastro"))
 
 buttonBack.addEventListener("click", () => navegarPara("login"))
