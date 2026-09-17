@@ -72,17 +72,6 @@ function navegarPara(tela) {
     }
 }
 
-const userState = () => {
-    // const token = localStorage.getItem("auth_token")
-    // if (token) {
-    //     // Opcional, mas recomendado: valida o token com o backend antes de confiar nele
-    //     verificarToken(token)
-    // } else {
-    //     navegarPara("login")
-    // }
-    return localStorage.getItem("usuario_logado")
-}
-
 function setUploadLoading(ativo) {
     if (ativo) {
         btnUpload.dataset.iconeOriginal = btnUpload.innerHTML // guarda o ícone original
@@ -108,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarEl.classList.add("d-none")
     telaCadastro.classList.add("d-none")
 
-    if (userState()) {
+    if (localStorage.getItem("usuario_logado")) {
         navegarPara('painel')
         carregarProdutos()
     } else navegarPara('login')

@@ -13,7 +13,7 @@ const inputEmail = document.getElementById("email")
 const inputSenha = document.getElementById("senha")
 
 // Página de cadastro
-// const buttonBack = document.getElementById("btn-voltar-login")
+const buttonCadastrar = document.getElementById("btn-cadastrar-acao")
 const formCadastro = document.getElementById("form-cadastro")
 const inputCpf = document.getElementById("cad-cpf")
 const inputTelefone = document.getElementById("cad-telefone")

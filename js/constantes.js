@@ -4,7 +4,8 @@ const CONSTANTS = {
     MSG_SUCCESS: false,
     STYLES: {
         SPINNER: `Verificando <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>`,
-        LOADING: `Carregando <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>`
+        LOADING: `Carregando <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>`,
+        SIGNING_UP: `Cadastrando <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>`
     },
     JS_STRINGS: {
         HTML_COMM_ERROR: `<li class="list-group-item text-center bg-transparent text-danger px-0">Falha ao carregar produtos. O servidor parece que está offline 😢</li>`,

@@ -3,11 +3,10 @@
 // ########################################
 async function enviarComprovante(arquivo) {
     const formData = new FormData()
-    formData.append("imagem", arquivo) // "comprovante" é o nome do campo que o backend vai receber
-
-    // NOVO
+    formData.append("imagem", arquivo) 
+    
     setUploadLoading(true)
-    // Se passar de 3s, avisa que está em andamento
+    // Se passar de 10s, avisa que está em andamento
     const avisoDemora = setTimeout(() => {
         toastAlert("Upload em andamento, aguarde...", CONSTANTS.MSG_SUCCESS)
     }, 3000)
@@ -20,6 +19,9 @@ async function enviarComprovante(arquivo) {
         toastAlert("Erro ao enviar o comprovante: " + e.message, CONSTANTS.MSG_ERROR)
 
     }
+    finally {
+        setUploadLoading(false)
+    }
 }
 
 // ########################################
@@ -31,7 +33,6 @@ inputComprovante.addEventListener("change", (e) => {
     if (!arquivo) return
 
     console.log("Arquivo selecionado:", arquivo)
-    // arquivo.name, arquivo.type, arquivo.size já disponíveis aqui
 
     enviarComprovante(arquivo)
 })

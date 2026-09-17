@@ -12,7 +12,6 @@ let graficoAtual = null
 // # FUNÇÕES LOCAIS
 // ########################################
 function renderizarLista({ produtos, estatisticas, historico }) {
-    // <?> precisa avaliar a necessidade de ter os outros inputs
     listaHTML.innerHTML = ''
 
     if (estatisticas.length == 0) {

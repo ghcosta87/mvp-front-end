@@ -172,3 +172,9 @@ body {
 .toast-close:hover {
     opacity: 0.7;
 }
+
+#btn-cadastrar-acao {
+    white-space: nowrap !important; /* Impede que o spinner caia para a linha de baixo */
+    font-size: 0.85rem; /* Diminui levemente a fonte para garantir que caiba no w-50 */
+    overflow: visible; /* Esconde se algo vazar */    
+}

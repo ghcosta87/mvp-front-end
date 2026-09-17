@@ -10,10 +10,9 @@ function verificarCamposDeLogin() {
 }
 
 function lerCampos() {
-  const pacoteDados = {
-    email: inputEmail.value,
-    senha_digitada: inputSenha.value
-  }
+  const pacoteDados = new FormData()
+  pacoteDados.append("email", inputEmail.value)
+  pacoteDados.append("senha_digitada", inputSenha.value)
   return pacoteDados
 }
 

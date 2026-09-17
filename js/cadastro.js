@@ -1,10 +1,6 @@
 // ########################################
 // # EVENTOS LOCAIS
 // ########################################
-inputTelefone.addEventListener("input", (e) => {
-    // adicionar formatação do campo de telefone
-})
-
 inputCpf.addEventListener("input", (e) => {
     let valor = e.target.value.replace(/\D/g, "") // Remove tudo que não for número
     if (valor.length > 11) valor = valor.slice(0, 11) // Limpa se passar de 11 dígitos
@@ -22,9 +18,14 @@ buttonBack.addEventListener("submit", async (event) => {
     navegarPara("login")
 })
 
-// ao terminar o cadastro tem q acertar a navegação, painel esta aparecendo junto com login
 formCadastro.addEventListener("submit", async (event) => {
     event.preventDefault()
+
+    // Salva o texto original, inicia o spinner e impede outro click
+    const textoOriginal = buttonCadastrar.innerHTML
+    buttonCadastrar.innerHTML = ''
+    buttonCadastrar.innerHTML = CONSTANTS.STYLES.SIGNING_UP
+    buttonCadastrar.disabled = true
 
     const formData = new FormData()
     formData.append("nome_completo", document.getElementById("cad-nome").value.trim())
@@ -40,19 +41,26 @@ formCadastro.addEventListener("submit", async (event) => {
             body: formData
         })
 
+        const dadosResposta = await resposta.json()
+
         if (!resposta.ok) {
-            const erroData = await resposta.json()
-            console.error("Erro retornado pelo Back-end:", erroData)
-            throw new Error(JSON.stringify(erroData.error || erroData))
+            toastAlert(dadosResposta.message, CONSTANTS.MSG_ERROR)
+            buttonCadastrar.innerHTML = textoOriginal
+            buttonCadastrar.disabled = false
+            return 0
         }
 
         formCadastro.reset()
         navegarPara("login")
         toastAlert("Cadastro realizado com sucesso! Faça login para continuar.", CONSTANTS.MSG_SUCCESS)
 
-    } catch (erro) {
-        toastAlert(`Falha ao cadastrar: ${erro.message}`, CONSTANTS.MSG_ERROR)
+    } catch (err) {
+        toastAlert(err, CONSTANTS.MSG_ERROR)
+        buttonCadastrar.innerHTML = textoOriginal
+        buttonCadastrar.disabled = false
     }
+    buttonCadastrar.innerHTML = textoOriginal
+    buttonCadastrar.disabled = false
 })
 
 btnConfirmarEncerramento.addEventListener("click", async () => {
@@ -76,18 +84,6 @@ btnConfirmarEncerramento.addEventListener("click", async () => {
             localStorage.clear()
             navegarPara("login")
         }
-
-        // const resposta = await fetch(`${CONSTANTS.API_URL}/deletar_usuario`, {
-        //     method: "POST",
-        //     body: formData
-        // })
-
-        // if (!resposta.ok) {
-        //     const erroData = await resposta.json()
-        //     throw new Error(erroData.error) //erro 422 acontece
-        // }
-
-
     } catch (erro) {
         toastAlert(`Falha ao encerrar conta: ${erro.message}`, CONSTANTS.MSG_ERROR)
     }
