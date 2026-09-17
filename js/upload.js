@@ -19,9 +19,6 @@ async function enviarComprovante(arquivo) {
         toastAlert("Erro ao enviar o comprovante: " + e.message, CONSTANTS.MSG_ERROR)
 
     }
-    finally {
-        setUploadLoading(false)
-    }
 }
 
 // ########################################

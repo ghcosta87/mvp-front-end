@@ -88,4 +88,7 @@ async function postPicture(dataIn, avisoDemora) {
     } catch (err) {
         toastAlert(CONSTANTS.JS_STRINGS.OFFLINE_SERVER, CONSTANTS.MSG_ERROR)
     }
+    finally {
+        setUploadLoading(false)
+    }
 }
