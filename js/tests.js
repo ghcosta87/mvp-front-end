@@ -112,7 +112,6 @@ function lerCampos(source) {
         pacoteDados.append("nome", nameFieldUpdate.value)
         pacoteDados.append("marca", brandFieldUpdate.value)
         pacoteDados.append("preco", priceFieldUpdate.value)
-        console.debug(pacoteDados)
         return pacoteDados
     }
 
