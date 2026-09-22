@@ -14,15 +14,54 @@ const brandField = document.getElementById("edit-marca")
 const priceField = document.getElementById("edit-preco")
 const storeField = document.getElementById("edit-loja")
 const dateField = document.getElementById("edit-data")
+const btnUpdateProduct = document.getElementById("btn-update-produto")
+const nameFieldUpdate = document.getElementById("update-nome")
+const brandFieldUpdate = document.getElementById("update-marca")
+const priceFieldUpdate = document.getElementById("update-preco")
 
 let produtoEmEdicao = null // guarda o nome do produto atualmente aberto no modal
 
+btnUpdateProduct.addEventListener("click", async () => {
+    const updateNow = await updateProduct()
 
-nameField.value = 'teste'
-brandField.value = 'teste'
-priceField.value = 12.34
-storeField.value = 'teste'
-dateField.value = '20/09/2026'
+    if (updateNow)
+        toastAlert(updateNow.message, CONSTANTS.MSG_SUCCESS)
+
+    
+    carregarProdutos()
+    // 1. Seleciona o elemento HTML do seu modal pelo ID
+    const modalElement = document.getElementById('modalHistorico'); // Substitua pelo ID real do seu modal
+
+    // 2. Pega a instância existente ou cria uma nova
+    const modalInstance = mdb.Modal.getInstance(modalElement) || new mdb.Modal(modalElement);
+
+    // 3. Força o fechamento
+    modalInstance.hide();
+
+})
+
+async function updateProduct() {
+    try {
+        const resposta = await fetch(`${CONSTANTS.API_URL}/update_product_info`, {
+            method: "PUT",
+            body: lerCampos("modal")
+        })
+
+        const dadosResposta = await resposta.json()
+
+        if (!resposta.ok) {
+            toastAlert(dadosResposta.message, CONSTANTS.MSG_ERROR)
+            return false
+        } else {
+            // toastAlert(dadosResposta.message, CONSTANTS.MSG_SUCCESS)
+            return dadosResposta
+        }
+    } catch (err) {
+        console.debug(err)
+        toastAlert(CONSTANTS.JS_STRINGS.OFFLINE_SERVER, CONSTANTS.MSG_ERROR)
+        return false
+    }
+}
 
 btnCadastrar.addEventListener("click", () => {
     if (cadastrarProduto()) {
@@ -67,6 +106,16 @@ function lerCampos(source) {
         return pacoteDados
     }
 
+    if (source == "modal") {
+        const pacoteDados = new FormData()
+        pacoteDados.append("nome_antigo", produtoEmEdicao)
+        pacoteDados.append("nome", nameFieldUpdate.value)
+        pacoteDados.append("marca", brandFieldUpdate.value)
+        pacoteDados.append("preco", priceFieldUpdate.value)
+        console.debug(pacoteDados)
+        return pacoteDados
+    }
+
     const pacoteDados = new FormData()
     pacoteDados.append("email", inputEmail.value)
     pacoteDados.append("senha_digitada", inputSenha.value)
@@ -97,6 +146,7 @@ function mostrarSecaoHistorico() {
     secaoEdicao.classList.add("escondido")
     secaoHistorico.classList.remove("escondido")
     btnEditarProduto.textContent = "Editar"
+    btnUpdateProduct.classList.add("d-none")
     // renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais, historico: historicoGlobal })
 }
 
@@ -104,6 +154,7 @@ function mostrarSecaoEdicao() {
     secaoHistorico.classList.add("escondido")
     secaoEdicao.classList.remove("escondido")
     btnEditarProduto.textContent = "Voltar"
+    btnUpdateProduct.classList.remove("d-none")
 
     preencherCamposEdicao(produtoEmEdicao)
 }
@@ -112,9 +163,9 @@ function preencherCamposEdicao(nomeProduto) {
     const estatistica = estatisticasGlobais.find(item => item.nome === nomeProduto)
     const produtoSelecionado = produtosGlobais.find(item => item.nome === nomeProduto)
 
-    document.getElementById("edit-nome").value = nomeProduto || ""
-    document.getElementById("edit-marca").value = produtoSelecionado?.marca || ""
-    document.getElementById("edit-preco").value = estatistica?.preco_medio || ""
+    document.getElementById("update-nome").value = nomeProduto || ""
+    document.getElementById("update-marca").value = produtoSelecionado?.marca || ""
+    document.getElementById("update-preco").value = estatistica?.preco_medio || ""
 
     // Reinicializa cada campo form-outline pra sincronizar o estado visual do label
     document.querySelectorAll("#secaoEdicao .form-outline").forEach(campo => {

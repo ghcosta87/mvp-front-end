@@ -97,6 +97,8 @@ function montarGrafico(historico) {
 
 function abrirHistorico(nomeDoProduto) {
     // falta buscar preco, marca e configurar pra fazer a requisição pra api
+    btnUpdateProduct.classList.add("d-none")
+    btnEditarProduto.textContent = "Editar"
     produtoEmEdicao = nomeDoProduto
     document.getElementById('nomeProdutoModal').innerText = nomeDoProduto
 
@@ -121,7 +123,7 @@ function abrirHistorico(nomeDoProduto) {
     montarGrafico(historico)
     const modal = new mdb.Modal(document.getElementById('modalHistorico'))
     modal.show()
-    // mostrarSecaoHistorico()
+    mostrarSecaoHistorico()
     preencherCamposEdicao(nomeDoProduto)
 }
 

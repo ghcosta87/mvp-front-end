@@ -127,20 +127,20 @@
                 <div id="secaoEdicao" class="modal-slide-section escondido">
                     <div class="modal-body">
                         <div class="form-outline mb-3">
-                            <input type="text" id="edit-nome" class="form-control" />
-                            <label class="form-label" for="edit-nome">Nome</label>
+                            <input type="text" id="update-nome" class="form-control" />
+                            <label class="form-label" for="update-nome">Nome</label>
                         </div>
                         <div class="form-outline mb-3">
-                            <input type="text" id="edit-marca" class="form-control" />
-                            <label class="form-label" for="edit-marca">Marca</label>
+                            <input type="text" id="update-marca" class="form-control" />
+                            <label class="form-label" for="update-marca">Marca</label>
                         </div>
                         <!-- <div class="form-floating mb-3">
                             <input type="email" id="email" class="form-control" placeholder="Email" required />
                             <label for="email">E-mail</label>
                         </div> -->
                         <div class="form-outline mb-3">
-                            <input type="number" step="0.01" id="edit-preco" class="form-control" />
-                            <label class="form-label" for="edit-preco">Preço</label>
+                            <input type="number" step="0.01" id="update-preco" class="form-control" />
+                            <label class="form-label" for="update-preco">Preço</label>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,8 @@
                 <!-- Rodapé -->
                 <div class="modal-footer border-top-0">
                     <button type="button" id="btn-editar-produto" class="btn btn-secondary">Editar</button>
-                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
+                    <button type="button" id="btn-update-produto" class="btn btn-secondary d-none">Atualizar</button>
+                    <button type="button" id="btn-close-modal" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
                 </div>
 
             </div>
@@ -301,7 +302,7 @@
                         <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
 
                         <button id="btn-abrir-painel" class="btn btn-outline-primary text-start w-100" title="Painel">
-                            <i class="fas fa-plus me-2"></i> Painel
+                            <i class="fas fa-house me-2"></i> Painel
                         </button>
 
                         <button id="btn-adicionar-manual" class="btn btn-outline-primary text-start w-100"
