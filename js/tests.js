@@ -18,16 +18,43 @@ const btnUpdateProduct = document.getElementById("btn-update-produto")
 const nameFieldUpdate = document.getElementById("update-nome")
 const brandFieldUpdate = document.getElementById("update-marca")
 const priceFieldUpdate = document.getElementById("update-preco")
+const frontVersion = document.getElementById('app-version-label');
 
 let produtoEmEdicao = null // guarda o nome do produto atualmente aberto no modal
 
+async function carregarVersaoSistema() {
+    try {
+        // Busca a versão direto do seu endpoint do Flask
+        // const response = await fetch('/version');
+        const response = await fetch(`${CONSTANTS.API_URL}/version`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        const data = await response.json();
+
+        // Exibe tanto a do Front quanto a do Back se quiser
+        const versaoFront = CONSTANTS.FRONT_VERSION
+
+        if (frontVersion) {
+            frontVersion.innerText = `Front: ${versaoFront} \n Back: ${data.version}`;
+        }
+    } catch (error) {
+        console.error("Não foi possível carregar a versão", error);
+    }
+}
+
+// Executa assim que a página abre
+document.addEventListener('DOMContentLoaded', carregarVersaoSistema);
 btnUpdateProduct.addEventListener("click", async () => {
     const updateNow = await updateProduct()
 
     if (updateNow)
         toastAlert(updateNow.message, CONSTANTS.MSG_SUCCESS)
 
-    
+
     carregarProdutos()
     // 1. Seleciona o elemento HTML do seu modal pelo ID
     const modalElement = document.getElementById('modalHistorico'); // Substitua pelo ID real do seu modal

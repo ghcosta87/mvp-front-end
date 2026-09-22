@@ -112,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
     telaCadastro.classList.add("d-none")
     sidebarEl.classList.add("d-none")
     telaCadastro.classList.add("d-none")
+    
+    carregarVersaoSistema()
 
     if (localStorage.getItem("usuario_logado")) {
         navegarPara('painel')
