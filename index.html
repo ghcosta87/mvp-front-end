@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="styles/painel.css">
     <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/modal_product_edit.css">
 </head>
 
 <body>
@@ -110,19 +111,47 @@
                     <h5 class="modal-title fw-bold" id="tituloModal">Histórico de Preços</h5>
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
-
-                <!-- Corpo -->
-                <div class="modal-body">
-                    <h6 id="nomeProdutoModal" class="mb-4" style="color: var( --text-main);"></h6>
-                    <ul class="list-group list-group-flush" id="listaHistorico">
-                    </ul>
+                <div class="modal-body pt-0">
+                    <h6 id="nomeProdutoModal" class="mb-0" style="color: var(--text-main);"></h6>
                 </div>
-                <!-- Gráfico-->
+
+                <!-- ============ VISÃO 1: HISTÓRICO (padrão, visível) ============ -->
+                <div id="secaoHistorico" class="modal-slide-section">
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush" id="listaHistorico"></ul>
+                    </div>
+
+                </div>
+
+                <!-- ============ VISÃO 2: EDIÇÃO (escondida por padrão) ============ -->
+                <div id="secaoEdicao" class="modal-slide-section escondido">
+                    <div class="modal-body">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="edit-nome" class="form-control" />
+                            <label class="form-label" for="edit-nome">Nome</label>
+                        </div>
+                        <div class="form-outline mb-3">
+                            <input type="text" id="edit-marca" class="form-control" />
+                            <label class="form-label" for="edit-marca">Marca</label>
+                        </div>
+                        <!-- <div class="form-floating mb-3">
+                            <input type="email" id="email" class="form-control" placeholder="Email" required />
+                            <label for="email">E-mail</label>
+                        </div> -->
+                        <div class="form-outline mb-3">
+                            <input type="number" step="0.01" id="edit-preco" class="form-control" />
+                            <label class="form-label" for="edit-preco">Preço</label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mt-4">
                     <canvas id="graficoHistorico"></canvas>
                 </div>
+
                 <!-- Rodapé -->
                 <div class="modal-footer border-top-0">
+                    <button type="button" id="btn-editar-produto" class="btn btn-secondary">Editar</button>
                     <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
                 </div>
 
@@ -165,47 +194,89 @@
     =========================================== -->
     <section id="tela-painel" style="display: none;">
         <div class="container py-4">
-            <!-- 4.1 BARRA SUPERIOR -->
+            <!-- 4.1(A) BARRA SUPERIOR -->
             <div class="container-fluid px-0 mb-3 mt-3 barra-busca-fixa">
                 <div class="d-flex align-items-center gap-2 w-100">
-                    <!-- 4.1.a BOTÃO DO MENU LATERAL -->
+                    <!-- 4.1.1 BOTÃO DO MENU LATERAL -->
                     <button id="btn-menu" class="btn btn-secondary px-3 shadow-sm" type="button" title="Menu">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <!-- 4.1.b CAMPO DE BUSCAR -->
+                    <!-- 4.1.2 CAMPO DE BUSCAR -->
                     <div class="form-outline flex-grow-1 mb-0" data-mdb-input-init>
                         <input type="text" id="input-busca" class="form-control" placeholder="Pesquisar produto..." />
                     </div>
                 </div>
             </div>
 
-            <hr class="my-4">
-            <!-- 4.2 LISTA DE PRODUTOS -->
-            <ul class="list-group rounded-4 overflow-hidden shadow-sm">
-                <li
-                    class="list-group-item d-flex justify-content-between align-items-center px-3 py-2 text-bg-dark border-secondary">
-                    <div class="w-100">
-                        <h5 class="mb-3 text-center fw-bold">
-                            Produtos Capturados
-                            <span id="loading-produtos"
-                                style="display: none; margin-left: 10px; vertical-align: middle;">
-                                <!-- Spinner nativo do Bootstrap -->
-                                <span class="spinner-border spinner-border-sm text-primary" role="status"
-                                    aria-hidden="true"></span>
-                            </span>
-                        </h5>
-                        <ul class="list-group list-group-flush" id="lista-produtos">
-                        </ul>
+            <!-- 4.2(A) SECÇÃO DA LISTA DE PRODUTOS -->
+            <section id="tela-lista-produtos" class="d-none">
+                <hr class="my-4">
+                <!-- 4.2 LISTA DE PRODUTOS -->
+                <ul class="list-group rounded-4 overflow-hidden shadow-sm">
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-center px-3 py-2 text-bg-dark border-secondary">
+                        <div class="w-100">
+                            <h5 class="mb-3 text-center fw-bold">
+                                Produtos Capturados
+                                <span id="loading-produtos"
+                                    style="display: none; margin-left: 10px; vertical-align: middle;">
+                                    <!-- Spinner nativo do Bootstrap -->
+                                    <span class="spinner-border spinner-border-sm text-primary" role="status"
+                                        aria-hidden="true"></span>
+                                </span>
+                            </h5>
+                            <ul class="list-group list-group-flush" id="lista-produtos">
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- 4.2(B) SECÇÃO DE CADASTRO DE PRODUTO -->
+            <section id="tela-novo-produto" class="d-none">
+                <div class="container py-4">
+                    <div id="secaoEdicao">
+                        <div class="container">
+                            <div class="form-outline mb-3">
+                                <input type="text" id="edit-nome" class="form-control" />
+                                <label class="form-label" for="edit-nome">Nome</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                <input type="text" id="edit-marca" class="form-control" />
+                                <label class="form-label" for="edit-marca">Marca</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                <input type="number" step="0.01" id="edit-preco" class="form-control" />
+                                <label class="form-label" for="edit-preco">Preço</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                <input type="text" id="edit-loja" class="form-control" />
+                                <label class="form-label" for="edit-preco">Loja</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                <input type="date" id="edit-data" class="form-control" />
+                                <label class="form-label" for="edit-preco">Data da compra</label>
+                            </div>
+                        </div>
                     </div>
-                </li>
-            </ul>
+                    <!-- Rodapé -->
+                    <div class="container py-4">
+                        <div class="container-footer border-top-0">
+                            <button type="submit" id="btn-cadastrar"
+                                class="btn btn-primary btn-lg w-100">Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </section>
 
+
     <!-- ==========================================
-    5. MENU LATERAL (OFFCANVAS) 
+    6. MENU LATERAL (OFFCANVAS) 
     =========================================== -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
+        <!-- Grupo: Header -->
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title fw-bold">Preço HUB</h5>
             <button type="button" class="btn-close" data-mdb-dismiss="offcanvas" aria-label="Fechar"></button>
@@ -228,23 +299,28 @@
                             <i class="fas fa-upload me-2"></i> Anexar Arquivo
                         </label>
                         <input type="file" id="input-comprovante" class="d-none" accept="image/*" />
+
+                        <button id="btn-abrir-painel" class="btn btn-outline-primary text-start w-100" title="Painel">
+                            <i class="fas fa-plus me-2"></i> Painel
+                        </button>
+
+                        <button id="btn-adicionar-manual" class="btn btn-outline-primary text-start w-100"
+                            title="Adicionar Manualmente">
+                            <i class="fas fa-plus me-2"></i> Novo Produto
+                        </button>
                     </div>
 
                     <div class="mb-4"></div>
                 </div>
             </div>
         </div>
-        <!-- Grupo: Gerenciamento de Conta -->
         <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
+            <!-- Grupo: Em desenvolvimento -->
             <div class="d-flex flex-column gap-3">
                 <hr class="my-2">
                 <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">
                     Em desenvolvimento</small>
                 <div class="d-flex flex-column gap-2 mt-2">
-                    <button id="btn-adicionar-manual" class="btn btn-outline-success text-start w-100"
-                        title="Adicionar Manualmente">
-                        <i class="fas fa-plus me-2"></i> Novo Produto
-                    </button>
                     <button id="btn-remover-produto" class="btn btn-outline-danger text-start w-100"
                         title="Remover produto">
                         <i class="fas fa-plus me-2"></i> Remover Produto
@@ -255,6 +331,7 @@
                     <hr class="my-2">
                 </div>
             </div>
+            <!-- Grupo: Gerenciamento de Conta -->
             <button id="btn-encerrar-conta" class="btn btn-outline-danger text-start w-100">
                 <i class="fas fa-user-times me-2"></i> Encerrar Conta
             </button>
@@ -265,7 +342,7 @@
     </div>
 
     <!-- ==========================================
-    6. TELA DE CADASTRO DE USUÁRIO
+    7. TELA DE CADASTRO DE USUÁRIO
     =========================================== -->
     <section id="tela-cadastro" class="vh-100 d-flex justify-content-center align-items-center d-none">
         <div class="container">
@@ -321,7 +398,7 @@
     </section>
 
     <!-- ==========================================
-    7. SCRIPTS
+    8. SCRIPTS
     =========================================== -->
     <!-- 7.1 MDBootstraP -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"
@@ -342,7 +419,8 @@
     <script src="js/cadastro.js" defer></script>
     <script src="js/sidebar.js" defer></script>
     <script src="js/painel.js" defer></script>
-    
+
+    <script src="js/tests.js" defer></script>
 
     <!-- 7.5 SCRIPTS AUXILIARES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" defer></script>

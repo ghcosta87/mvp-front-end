@@ -1,6 +1,164 @@
 // // ########################################
 // // # ↓ ↓ ↓ ↓ ↓ ↓ ÁREA DE TESTES ↓ ↓ ↓ ↓ ↓ ↓
 // // ########################################
+const secaoHistorico = document.getElementById("secaoHistorico")
+const secaoEdicao = document.getElementById("secaoEdicao")
+const btnEditarProduto = document.getElementById("btn-editar-produto")
+const telaNovoProduto = document.getElementById("tela-novo-produto")
+const btnTelaNovoProduto = document.getElementById("btn-adicionar-manual")
+const telaListaProdutos = document.getElementById("tela-lista-produtos")
+const btnOpenPanel = document.getElementById("btn-abrir-painel")
+const btnCadastrar = document.getElementById("btn-cadastrar")
+const nameField = document.getElementById("edit-nome")
+const brandField = document.getElementById("edit-marca")
+const priceField = document.getElementById("edit-preco")
+const storeField = document.getElementById("edit-loja")
+const dateField = document.getElementById("edit-data")
+
+let produtoEmEdicao = null // guarda o nome do produto atualmente aberto no modal
+
+
+nameField.value = 'teste'
+brandField.value = 'teste'
+priceField.value = 12.34
+storeField.value = 'teste'
+dateField.value = '20/09/2026'
+
+btnCadastrar.addEventListener("click", () => {
+    if (cadastrarProduto()) {
+        nameField.value = ''
+        brandField.value = ''
+        priceField.value = ''
+        storeField.value = ''
+        dateField.value = ''
+        toastAlert("cadastrado com sucesso.", CONSTANTS.CONSTANTS.MSG_SUCCESS)
+    }
+})
+
+async function cadastrarProduto() {
+    try {
+        const resposta = await fetch(`${CONSTANTS.API_URL}/add_product`, {
+            method: "POST",
+            body: lerCampos("painel")
+        })
+
+        const dadosResposta = await resposta.json()
+
+        if (!resposta.ok) {
+            toastAlert(dadosResposta.message, CONSTANTS.MSG_ERROR)
+            return false
+        } else return dadosResposta
+    } catch (err) {
+        console.debug(err)
+        toastAlert(CONSTANTS.JS_STRINGS.OFFLINE_SERVER, CONSTANTS.MSG_ERROR)
+        return false
+    }
+}
+
+function lerCampos(source) {
+    if (source == "painel") {
+        const pacoteDados = new FormData()
+        pacoteDados.append("nome", nameField.value)
+        pacoteDados.append("marca", brandField.value)
+        pacoteDados.append("preco", priceField.value)
+        // pacoteDados.append("loja", storeField.value)
+        pacoteDados.append("data_da_compra", dateField.value)
+        pacoteDados.append("data_de_cadastro", new Date().toISOString())
+        return pacoteDados
+    }
+
+    const pacoteDados = new FormData()
+    pacoteDados.append("email", inputEmail.value)
+    pacoteDados.append("senha_digitada", inputSenha.value)
+    return pacoteDados
+}
+
+btnTelaNovoProduto.addEventListener("click", () => {
+    // navegarPara("novoproduto")
+    fecharSidebarEExecutar(navegarPara, "novoproduto")
+})
+
+function abrirHistorico2(nomeDoProduto) {
+    produtoEmEdicao = nomeDoProduto
+
+    document.getElementById('nomeProdutoModal').innerText = nomeDoProduto
+
+    const historico = historicoGlobal[nomeDoProduto] || []
+    montarGrafico(historico)
+
+    // Sempre abre na visão de histórico, nunca na de edição
+    mostrarSecaoHistorico()
+
+    const modal = new mdb.Modal(document.getElementById('modalHistorico'))
+    modal.show()
+}
+
+function mostrarSecaoHistorico() {
+    secaoEdicao.classList.add("escondido")
+    secaoHistorico.classList.remove("escondido")
+    btnEditarProduto.textContent = "Editar"
+    // renderizarLista({ produtos: produtosGlobais, estatisticas: estatisticasGlobais, historico: historicoGlobal })
+}
+
+function mostrarSecaoEdicao() {
+    secaoHistorico.classList.add("escondido")
+    secaoEdicao.classList.remove("escondido")
+    btnEditarProduto.textContent = "Voltar"
+
+    preencherCamposEdicao(produtoEmEdicao)
+}
+
+function preencherCamposEdicao(nomeProduto) {
+    const estatistica = estatisticasGlobais.find(item => item.nome === nomeProduto)
+    const produtoSelecionado = produtosGlobais.find(item => item.nome === nomeProduto)
+
+    document.getElementById("edit-nome").value = nomeProduto || ""
+    document.getElementById("edit-marca").value = produtoSelecionado?.marca || ""
+    document.getElementById("edit-preco").value = estatistica?.preco_medio || ""
+
+    // Reinicializa cada campo form-outline pra sincronizar o estado visual do label
+    document.querySelectorAll("#secaoEdicao .form-outline").forEach(campo => {
+        const instancia = mdb.Input.getInstance(campo) || new mdb.Input(campo)
+        instancia.update()
+    })
+}
+
+btnEditarProduto.addEventListener("click", () => {
+    const estaNaEdicao = !secaoEdicao.classList.contains("escondido")
+
+    if (estaNaEdicao) {
+        mostrarSecaoHistorico()
+    } else {
+        mostrarSecaoEdicao()
+    }
+})
+
+
+btnOpenPanel.addEventListener("click", () => {
+    // const estaNaEdicao = !secaoEdicao.classList.contains("escondido")
+    fecharSidebarEExecutar(navegarPara, "painel")
+    carregarProdutos()
+    // if (estaNaEdicao) {
+    //     mostrarSecaoHistorico()
+    // } else {
+    //     mostrarSecaoEdicao()
+    // }
+})
+
+
+function fecharSidebarEExecutar(acaoCallback, path) {
+    const menuLateral = mdb.Offcanvas.getInstance(sidebarEl);
+
+    if (menuLateral) {
+        menuLateral.hide(); // Isso força o Bootstrap a sumir com o offcanvas E remover o fundo escuro
+    }
+
+    // Executa a ação desejada (mudar de tela, abrir modal, etc.)
+    if (acaoCallback) {
+        acaoCallback(path);
+    }
+}
+
 // inputTelefone.addEventListener("input", (e) => {
 //     // adicionar formatação do campo de telefone
 // })
@@ -205,18 +363,18 @@
 
 
 
-            // <!-- Grupo: Temas -->
-            // <div>
-            //     <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Aparência</small>
-            //     <div class="d-flex flex-column gap-2 mt-2">
-            //         <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
-            //             <i class="fas fa-sun me-2"></i> Claro
-            //         </button>
-            //         <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
-            //             <i class="fas fa-moon me-2"></i> Escuro
-            //         </button>
-            //         <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
-            //             <i class="fas fa-microchip me-2"></i> Tech
-            //         </button>
-            //     </div>
-            // </div>
+// <!-- Grupo: Temas -->
+// <div>
+//     <small class="text-muted text-uppercase fw-bold px-1" style="font-size: 0.7rem;">Aparência</small>
+//     <div class="d-flex flex-column gap-2 mt-2">
+//         <button id="btn-tema-claro" class="btn btn-outline-secondary text-start w-100">
+//             <i class="fas fa-sun me-2"></i> Claro
+//         </button>
+//         <button id="btn-tema-escuro" class="btn btn-outline-secondary text-start w-100">
+//             <i class="fas fa-moon me-2"></i> Escuro
+//         </button>
+//         <button id="btn-tema-tech" class="btn btn-outline-secondary text-start w-100">
+//             <i class="fas fa-microchip me-2"></i> Tech
+//         </button>
+//     </div>
+// </div>

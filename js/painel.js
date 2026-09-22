@@ -96,6 +96,8 @@ function montarGrafico(historico) {
 }
 
 function abrirHistorico(nomeDoProduto) {
+    // falta buscar preco, marca e configurar pra fazer a requisição pra api
+    produtoEmEdicao = nomeDoProduto
     document.getElementById('nomeProdutoModal').innerText = nomeDoProduto
 
     const meuItem = estatisticasGlobais.find(item => item.nome === nomeDoProduto)
@@ -119,6 +121,8 @@ function abrirHistorico(nomeDoProduto) {
     montarGrafico(historico)
     const modal = new mdb.Modal(document.getElementById('modalHistorico'))
     modal.show()
+    // mostrarSecaoHistorico()
+    preencherCamposEdicao(nomeDoProduto)
 }
 
 // ########################################
@@ -131,5 +135,6 @@ inputBusca.addEventListener('input', (e) => {
 
 btnMenu.addEventListener("click", () => {
     const menuLateral = mdb.Offcanvas.getInstance(sidebarEl) || new mdb.Offcanvas(sidebarEl)
+    sidebarEl.classList.remove("d-none")
     menuLateral.show()
 })

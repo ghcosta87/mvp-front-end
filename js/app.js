@@ -53,14 +53,18 @@ function navegarPara(tela) {
             telaPainel.classList.add("d-none")
             telaLogin.classList.remove("d-none")
             sidebarEl.classList.add("d-none")
+            telaNovoProduto.classList.add("d-none")
+            telaListaProdutos.classList.remove("d-none")
             break
         case "painel":
             telaPainel.classList.remove("d-none")
             loading.style.display = "inline-block"
             telaLogin.classList.add("d-none")
             telaPainel.style.display = "block"
-            sidebarEl.classList.remove("d-none")
+            sidebarEl.classList.add("d-none")
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
+            telaNovoProduto.classList.add("d-none")
+            telaListaProdutos.classList.remove("d-none")
             break
         case "cadastro":
             telaCadastro.classList.add("d-none")
@@ -68,6 +72,18 @@ function navegarPara(tela) {
             telaCadastro.classList.remove("d-none")
             telaCadastro.style.display = "flex"
             sidebarEl.classList.add("d-none")
+            telaNovoProduto.classList.add("d-none")
+            telaListaProdutos.classList.remove("d-none")
+            break
+        case "novoproduto":
+            telaPainel.classList.remove("d-none")
+            loading.style.display = "inline-block"
+            telaLogin.classList.add("d-none")
+            telaPainel.style.display = "block"
+            sidebarEl.classList.add("d-none")
+            telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
+            telaNovoProduto.classList.remove("d-none")
+            telaListaProdutos.classList.add("d-none")
             break
     }
 }

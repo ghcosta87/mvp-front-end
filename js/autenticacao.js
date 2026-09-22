@@ -9,12 +9,12 @@ function verificarCamposDeLogin() {
   botaoLogin.disabled = buttonDisabled
 }
 
-function lerCampos() {
-  const pacoteDados = new FormData()
-  pacoteDados.append("email", inputEmail.value)
-  pacoteDados.append("senha_digitada", inputSenha.value)
-  return pacoteDados
-}
+// function lerCampos() {
+//   const pacoteDados = new FormData()
+//   pacoteDados.append("email", inputEmail.value)
+//   pacoteDados.append("senha_digitada", inputSenha.value)
+//   return pacoteDados
+// }
 
 // ########################################
 // # EVENTOS LOCAIS

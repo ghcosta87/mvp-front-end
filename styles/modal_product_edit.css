@@ -1,0 +1,50 @@
+/* =========================================
+   TRANSIÇÃO ENTRE VISÕES DO MODAL DE HISTÓRICO
+========================================= */
+.modal-slide-section {
+    max-height: 600px;
+    opacity: 1;
+    overflow: hidden;
+    /* transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.35s ease; */
+    transform: translateX(0);
+}
+
+.modal-slide-section.escondido {
+    max-height: 0;
+    opacity: 0;
+    transform: translateX(-20px);
+    pointer-events: none;
+}
+
+#secaoEdicao .form-outline .form-control {
+    border: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+#secaoEdicao .form-outline .form-control:focus {
+    border: none !important;
+    border-bottom: 2px solid var(--btn-primary) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#secaoEdicao .form-outline .form-notch-leading,
+#secaoEdicao .form-outline .form-notch-middle,
+#secaoEdicao .form-outline .form-notch-trailing {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#secaoEdicao .form-outline .form-control:focus ~ .form-notch-leading,
+#secaoEdicao .form-outline .form-control:focus ~ .form-notch-middle,
+#secaoEdicao .form-outline .form-control:focus ~ .form-notch-trailing {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+
+
