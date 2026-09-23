@@ -61,7 +61,7 @@ function navegarPara(tela) {
             loading.style.display = "inline-block"
             telaLogin.classList.add("d-none")
             telaPainel.style.display = "block"
-            sidebarEl.classList.add("d-none")
+            sidebarEl.classList.remove("d-none")
             telaCadastro.classList.add("d-none") // Garante que o cadastro esteja escondido
             telaNovoProduto.classList.add("d-none")
             telaListaProdutos.classList.remove("d-none")
@@ -88,18 +88,33 @@ function navegarPara(tela) {
     }
 }
 
-function setUploadLoading(ativo) {
-    if (ativo) {
-        btnUpload.dataset.iconeOriginal = btnUpload.innerHTML // guarda o ícone original
-        btnUpload.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-        btnUpload.classList.add("disabled") // impede novo clique visualmente
-        btnUpload.style.pointerEvents = "none" // impede clique de fato (label não tem "disabled" nativo)
-        inputComprovante.disabled = true
-    } else {
-        btnUpload.innerHTML = btnUpload.dataset.iconeOriginal
-        btnUpload.classList.remove("disabled")
-        btnUpload.style.pointerEvents = "auto"
-        inputComprovante.disabled = false
+function setUploadLoading(ativo, type) {
+    if (type == 'camera') {
+        if (ativo) {
+            btnAbrirCamera.dataset.iconeOriginal = btnAbrirCamera.innerHTML // guarda o ícone original
+            btnAbrirCamera.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+            btnAbrirCamera.classList.add("disabled") // impede novo clique visualmente
+            btnAbrirCamera.style.pointerEvents = "none" // impede clique de fato (label não tem "disabled" nativo
+        } else {
+            btnAbrirCamera.innerHTML = btnAbrirCamera.dataset.iconeOriginal
+            btnAbrirCamera.classList.remove("disabled")
+            btnAbrirCamera.style.pointerEvents = "auto"
+        }
+        return 0
+    }
+    if (type != 'camera') {
+        if (ativo) {
+            btnUpload.dataset.iconeOriginal = btnUpload.innerHTML // guarda o ícone original
+            btnUpload.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+            btnUpload.classList.add("disabled") // impede novo clique visualmente
+            btnUpload.style.pointerEvents = "none" // impede clique de fato (label não tem "disabled" nativo)
+            inputComprovante.disabled = true
+        } else {
+            btnUpload.innerHTML = btnUpload.dataset.iconeOriginal
+            btnUpload.classList.remove("disabled")
+            btnUpload.style.pointerEvents = "auto"
+            inputComprovante.disabled = false
+        }
     }
 }
 
@@ -112,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     telaCadastro.classList.add("d-none")
     sidebarEl.classList.add("d-none")
     telaCadastro.classList.add("d-none")
-    
+
     carregarVersaoSistema()
 
     if (localStorage.getItem("usuario_logado")) {

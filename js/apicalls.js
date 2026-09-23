@@ -63,7 +63,7 @@ async function deletarUsuario(dataIn) {
     }
 }
 
-async function postPicture(dataIn, avisoDemora) {
+async function postPicture(dataIn, avisoDemora,type) {
     try {
         const resposta = await fetch(`${CONSTANTS.API_URL}/upload`, {
             method: 'POST',
@@ -83,12 +83,12 @@ async function postPicture(dataIn, avisoDemora) {
         }
 
         clearTimeout(avisoDemora) // cancela o aviso se já terminou antes dos 3s
-        setUploadLoading(false)
+        setUploadLoading(false,type)
 
     } catch (err) {
         toastAlert(CONSTANTS.JS_STRINGS.OFFLINE_SERVER, CONSTANTS.MSG_ERROR)
     }
     finally {
-        setUploadLoading(false)
+        setUploadLoading(false,type)
     }
 }

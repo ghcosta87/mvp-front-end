@@ -97,6 +97,9 @@ Através do navegador de sua preferência digite o ip-da-maquina:35112
 - [ SOLVED ] botao voltar na janela de cadastro esta sem fade ao passar o mouse
 - [        ] alterar a resposta para receber o nome do usuário, e não o email
 - [        ] quando usuario força login pelo console a função GET ainda puxa os dados do backend
+- [ SOLVED ] escanear e anexar arquivo nao estao funcionando direito
+- [ SOLVED ] afastar botao encerrar conta e sair
+- [        ] 
 ```
 
 ## FUTURAS ATUALIZAÇÕES

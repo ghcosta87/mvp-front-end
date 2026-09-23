@@ -70,7 +70,7 @@ async function postImage(dataIn) {
         .catch(err => {
             resultadoDiv.innerText = "Erro ao processar: " + err;
             toastAlert("Erro ao processar: " + err, CONSTANTS.MSG_ERROR)
-        });        
+        });
 }
 
 if (videoElement && canvas && btnCapturarFoto && modalCamera && resultadoDiv)
@@ -86,7 +86,16 @@ if (videoElement && canvas && btnCapturarFoto && modalCamera && resultadoDiv)
             const formData = new FormData();
             formData.append('imagem', blob, 'captura.jpg');
 
-            postImage(formData)
+            // postImage(formData)
+
+            setUploadLoading(true, 'camera')
+            // Se passar de 10s, avisa que está em andamento
+
+            const avisoDemora = setTimeout(() => {
+                toastAlert("Upload em andamento, aguarde...", CONSTANTS.MSG_SUCCESS)
+            }, 3000)
+            
+            postPicture(formData, avisoDemora, 'camera')
 
         }, 'image/jpeg', 0.85);
         pararCamera()

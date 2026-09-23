@@ -5,6 +5,36 @@
     width: clamp(220px, 25%, 400px) !important;
 }
 
+.offcanvas { /*fundo da barra lateral*/
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* 1. Alvo: Todos os elementos filhos diretos do seu container */
+.offcanvas-body.d-flex.flex-column > * {
+  flex-shrink: 1;   /* Força o elemento a diminuir se o espaço acabar */
+  min-height: 0;    /* Remove a trava de altura mínima padrão do navegador */
+}
+
+/* 2. Alvo: Textos e links (para diminuírem em telas muito pequenas) */
+.offcanvas-body {
+  /* Se o espaço vertical for menor que 600px (ex: celular deitado), diminui a fonte */
+  @media (max-height: 600px) {
+    font-size: 0.85rem; 
+    padding-top: 1rem !important;    /* Reduz o py-4 do Bootstrap */
+    padding-bottom: 1rem !important; /* Reduz o py-4 do Bootstrap */
+  }
+}
+
+/* 3. Alvo: Imagens ou Logotipos internos (essenciais para não estourarem a tela) */
+.offcanvas-body img {
+  max-height: 20vh;      /* A imagem nunca vai ocupar mais que 20% da altura da tela */
+  height: auto;
+  object-fit: contain;   /* Mantém a proporção sem distorcer */
+}
+
+
 /* =========================================
    MODO PAISAGEM: menu sempre visível
 ========================================= */
@@ -39,3 +69,8 @@
         padding-right: 0 !important;
     }
 }
+
+/* =========================================
+   MODO PAISAGEM: menu sempre visível
+========================================= */
+

@@ -37,12 +37,7 @@ body {
 /* Superfícies "de cartão" do projeto, incluindo o menu lateral */
 .card,
 .resultado-box,
-.list-group-item,
-.offcanvas {
-    background-color: var(--bg-card) !important;
-    color: var(--text-main) !important;
-    border-color: var(--border-color) !important;
-}
+.list-group-item
 
 .text-price {
     color: var(--btn-success) !important;

@@ -17,7 +17,6 @@ async function enviarComprovante(arquivo) {
     } catch (e) {
         console.log("Erro ao enviar o comprovante:", e)
         toastAlert("Erro ao enviar o comprovante: " + e.message, CONSTANTS.MSG_ERROR)
-
     }
 }
 
@@ -31,5 +30,6 @@ inputComprovante.addEventListener("change", (e) => {
 
     console.log("Arquivo selecionado:", arquivo)
 
+    // aki tem q alterar o botao 
     enviarComprovante(arquivo)
 })
