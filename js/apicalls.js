@@ -63,7 +63,7 @@ async function deletarUsuario(dataIn) {
     }
 }
 
-async function postPicture(dataIn, avisoDemora,type) {
+async function postPicture(dataIn, avisoDemora, type) {
     try {
         const resposta = await fetch(`${CONSTANTS.API_URL}/upload`, {
             method: 'POST',
@@ -77,18 +77,19 @@ async function postPicture(dataIn, avisoDemora,type) {
         else {
             if (typeof carregarProdutos === "function") {
                 carregarProdutos()
-                // return dadosResposta
             }
             toastAlert(dadosResposta.message, CONSTANTS.MSG_SUCCESS)
+            // aqui tem q retornaros dados completos sem precisar chamar < carregarProdutos() >
+            // deve retornar ConsultaSchema com as 3 listas, ao inves de somente uma
         }
 
         clearTimeout(avisoDemora) // cancela o aviso se já terminou antes dos 3s
-        setUploadLoading(false,type)
+        setUploadLoading(false, type)
 
     } catch (err) {
         toastAlert(CONSTANTS.JS_STRINGS.OFFLINE_SERVER, CONSTANTS.MSG_ERROR)
     }
     finally {
-        setUploadLoading(false,type)
+        setUploadLoading(false, type)
     }
 }

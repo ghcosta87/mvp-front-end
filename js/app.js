@@ -122,6 +122,8 @@ function setUploadLoading(ativo, type) {
 // # INICIALIZAÇÃO
 // ########################################
 document.addEventListener("DOMContentLoaded", () => {
+    // Logger.info("Página carrega produto:", produto); // <- Fica aqui para sempre!
+
     botaoLogin.disabled = true
     aplicarTema(localStorage.getItem("tema_escolhido"))
     telaCadastro.classList.add("d-none")
